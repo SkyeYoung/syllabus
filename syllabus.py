@@ -5,7 +5,7 @@
 导出 ical 格式的江科大课表和 ics 文件。
 Let's Make Calendar Great Again!
 
-※ 仅使用本脚本，必须要在底部 main 处填入账号和正式开学日期。
+※ 单独使用本脚本时，必须在底部 main 处填入账号和正式开学日期。
 ※ 理论上，使用强智教务系统的都可以在修改网站链接和上课时间后使用本脚本。
 """
 
@@ -17,18 +17,19 @@ from typing import Dict
 
 from bs4 import BeautifulSoup
 from icalendar import Calendar, Event
-from requests import Session
+from requests import Session, exceptions
+from requests.adapters import HTTPAdapter
 
-#################################################
-#     不要修改下面的代码，除非你知道你在做什么     #
-#################################################
+###############################################################################
+#                   不要修改下面的代码，除非你知道你在做什么                     #
+###############################################################################
 
 # 基础链接
-url = 'http://jwgl.just.edu.cn:8080/jsxsd/'
+url = 'http://jwgl.just.edu.cn:8080/jsxsd'
 # 登录链接
-loginURL = '{}xk/LoginToXk'.format(url)
+loginURL = f'{url}/xk/LoginToXk'
 # 课表链接
-syllabusURL = '{}xskb/xskb_list.do'.format(url)
+syllabusURL = f'{url}/xskb/xskb_list.do'
 
 
 class ClassInfo:
@@ -68,8 +69,17 @@ class ClassInfo:
         self.date = [int(semester[:4]) if semester[-1] == 1 else int(semester[5:9]), start_date[0], start_date[1]]
 
     def __str__(self):
-        return '课程号：{}，课程名：{}，教师：{}，周次：{}，上课地点：{}'.format(self.id, self.name, self.teacher,
-                                                          self.week_range_text, self.classroom)
+        return f'课程号：{self.id}，课程名：{self.name}，教师：{self.teacher}，周次：{self.week_range_text}，上课地点：{self.classroom}'
+
+
+def color_font(content: str, color: str) -> str:
+    color_dict = {
+        'red': 31,
+        'green': 32,
+        'yellow': 33,
+        'blue': 34
+    }
+    return f'\033[{color_dict[color]}m{content}\033[0m'
 
 
 def get_cal(cal: Calendar) -> str:
@@ -99,12 +109,12 @@ def get_cal_event(info: ClassInfo, *, start_week=0, end_week=1) -> Event:
     event.add('summary', info.name)
     # 其余课程信息
     event.add('description',
-              '课程号：{}\n教师：{}\n周次：{}'.format(info.id, info.teacher, info.week_range_text))
+              f'课程号：{info.id}\n教师：{info.teacher}\n周次：{info.week_range_text}')
     event.add('location', info.classroom)
     return event
 
 
-def generate_syllabus(account_info: Dict[str, str], start_date: tuple) -> tuple:
+def generate_syllabus(account_info: Dict[str, str], start_date: tuple) -> tuple or str:
     """生成课表
     :param account_info:
     :param start_date:
@@ -114,15 +124,30 @@ def generate_syllabus(account_info: Dict[str, str], start_date: tuple) -> tuple:
     """登录"""
     # 初始化 session
     session = Session()
+    session.mount('http://', HTTPAdapter(max_retries=2))
+    session.mount('https://', HTTPAdapter(max_retries=2))
     # 登录 & 获取 cookie
-    session.post(url=loginURL, data=account_info)
-    print('STEP: 登陆成功')
+    print(f'STEP: 登录系统\t{color_font("连接中...", "blue")}', end='\t')
+    try:
+        res = session.post(url=loginURL, data=account_info, timeout=10)
+    except exceptions.RequestException:
+        print(f'\rSTEP: 登录系统\t{color_font("连接失败", "red")}')
+        return '连接失败'
+
+    login_html = BeautifulSoup(res.text, features='html.parser')
+    warnings = login_html.find_all('font', {'color': 'red'})
+    if len(warnings) > 0 and warnings[0].get_text() == '用户名或密码错误':
+        print(f'\rSTEP: 登录系统\t{color_font("失败", "red")}')
+        return '用户名或密码错误'
+    else:
+        print(f'\rSTEP: 登录系统\t{color_font("成功", "green")}')
 
     """获取学期时间 & 课表"""
-    res = session.get(url=syllabusURL)
-    html = BeautifulSoup(res.text, features='html.parser')
+    print('STEP: 获取课表', end='\t')
+    # 获取网页
+    html = BeautifulSoup(session.get(url=syllabusURL).text, features='html.parser')
     # 获取学期时间
-    term = html.find_all('option', {'selected': 'selected'})[0].get_text()
+    term = html.find(id='xnxq01id').find_all_next('option', {'selected': 'selected'})[0].get_text()
     # 课表
     tds = html.find(id='kbtable').find_all_next('div', class_='kbcontent')
     # 存储课表信息
@@ -147,16 +172,17 @@ def generate_syllabus(account_info: Dict[str, str], start_date: tuple) -> tuple:
         # 将同一时间段内的课程加入到课表信息中
         class_table.append(class_list)
         counter += 1
-    print('STEP: 获取课表成功')
+    print(color_font('成功', 'green'))
 
     """生成日历"""
+    print('STEP: 生成日历', end='\t')
     syllabus = Calendar()
     # 版本，用于支持一些新特性，比如换行什么的
     syllabus.add('version', '2.0')
     # 日历开始时间
     syllabus.add('dtstart', datetime.now())
     # 日历名称
-    syllabus.add('summary', '{} syllabus'.format(term))
+    syllabus.add('summary', f'{term} syllabus')
     # 遍历日历事件
     for courses in class_table:
         for course in courses:
@@ -168,7 +194,8 @@ def generate_syllabus(account_info: Dict[str, str], start_date: tuple) -> tuple:
                 syllabus.add_component(get_cal_event(course))
                 if week_range_len == 4:
                     syllabus.add_component(get_cal_event(course, start_week=2, end_week=3))
-    print('STEP: 生成日历成功')
+    print(color_font('成功', 'green'))
+
     return syllabus, term
 
 
@@ -176,13 +203,14 @@ def export_ics(data: tuple):
     """导出 ics 文件
     :param data: 一个 ical 格式的课表和学期的 tuple
     """
-    with open('./{}_syllabus.ics'.format(data[1]), 'w', encoding='utf8') as f:
+    print('STEP: 导出文件', end='\t')
+    with open(f'./{data[1]}_syllabus.ics', 'w', encoding='utf8') as f:
         f.write(get_cal(data[0]))
-    print('STEP: 导出 ics 文件成功')
+    print(color_font('成功', 'green'))
 
 
 if __name__ == '__main__':
-    """仅使用本脚本，需要在此处填入账号和正式开学日期"""
+    """单独使用本脚本时，需要在此处填入账号和正式开学日期"""
 
     # 账户信息
     account = {
@@ -193,4 +221,11 @@ if __name__ == '__main__':
     startDate = (2, 17)
 
     # 生成课表并导出
-    export_ics(generate_syllabus(account, startDate))
+    syllabusData = ''
+    try:
+        syllabusData = generate_syllabus(account, startDate)
+    except Exception as err:
+        # logging.exception(err)
+        print('\n', color_font(f'Error: {err}', 'red'))
+        exit(1)
+    export_ics(syllabusData)
