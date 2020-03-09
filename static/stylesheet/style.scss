@@ -1,0 +1,89 @@
+$default: #d0d0d5;
+$focus: #2486ff;
+
+fieldset {
+  border-width: 0;
+}
+
+.input-fill {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin: 30px 0;
+
+  > input {
+    padding: 14px 16px 14px;
+    border: 1px solid $default;
+    border-radius: 4px;
+    outline: none;
+    width: 200px;
+
+    &:focus {
+      border-color: $focus;
+    }
+
+    &:placeholder-shown::placeholder {
+      color: transparent;
+    }
+
+    &:not(:placeholder-shown) ~ label,
+    &:focus ~ label {
+      color: $focus;
+      transform: scale(0.75) translateY(-28px);
+    }
+  }
+
+  > label {
+    color: $default;
+    background-color: #fff;
+    left: 16px;
+    padding: 0 2px;
+    position: absolute;
+    pointer-events: none;
+    transform: translateY(-1px);
+
+    transition: transform 0.24s, color 0.24s;
+  }
+}
+
+.date-input {
+
+  > .date-picker {
+    opacity: 0;
+    pointer-events: none;
+
+    position: absolute;
+    transition: opacity 0.4s;
+
+    &.visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    > header {
+      text-align: center;
+      display: flex;
+      justify-content: space-around;
+
+      span {
+        cursor: pointer;
+      }
+    }
+
+    > main {
+      table {
+
+      }
+
+      td {
+        text-align: center;
+        cursor: pointer;
+        padding: 2px 4px;
+
+        &.not-this-month {
+          color: $default;
+        }
+      }
+    }
+  }
+}

@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """syllabus
-导出 ical 格式的江科大课表和 ics 文件。
+导出 ical 格式的 JUST 课表和 ics 文件。
 Let's Make Calendar Great Again!
 
 ※ 单独使用本脚本时，必须在底部 main 处填入账号和正式开学日期。
@@ -115,7 +115,7 @@ def get_cal_event(info: ClassInfo, *, start_week=0, end_week=1) -> Event:
     return event
 
 
-def generate_syllabus(account_info: Dict[str, str], start_date: tuple) -> tuple or str:
+def generate_syllabus(account_info: Dict[str, str], start_date: tuple) -> tuple:
     """生成课表
     :param account_info:
     :param start_date:

@@ -1,0 +1,66 @@
+fieldset {
+  border-width: 0;
+}
+
+.input-fill {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin: 30px 0;
+}
+.input-fill > input {
+  padding: 14px 16px 14px;
+  border: 1px solid #d0d0d5;
+  border-radius: 4px;
+  outline: none;
+  width: 200px;
+}
+.input-fill > input:focus {
+  border-color: #2486ff;
+}
+.input-fill > input:placeholder-shown::placeholder {
+  color: transparent;
+}
+.input-fill > input:not(:placeholder-shown) ~ label, .input-fill > input:focus ~ label {
+  color: #2486ff;
+  transform: scale(0.75) translateY(-28px);
+}
+.input-fill > label {
+  color: #d0d0d5;
+  background-color: #fff;
+  left: 16px;
+  padding: 0 2px;
+  position: absolute;
+  pointer-events: none;
+  transform: translateY(-1px);
+  transition: transform 0.24s, color 0.24s;
+}
+
+.date-input > .date-picker {
+  opacity: 0;
+  pointer-events: none;
+  position: absolute;
+  transition: opacity 0.4s;
+}
+.date-input > .date-picker.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+.date-input > .date-picker > header {
+  text-align: center;
+  display: flex;
+  justify-content: space-around;
+}
+.date-input > .date-picker > header span {
+  cursor: pointer;
+}
+.date-input > .date-picker > main td {
+  text-align: center;
+  cursor: pointer;
+  padding: 2px 4px;
+}
+.date-input > .date-picker > main td.not-this-month {
+  color: #d0d0d5;
+}
+
+/*# sourceMappingURL=style.css.map */

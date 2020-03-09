@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>JUST 课表导出</title>
+    <link rel="stylesheet" href="/static/stylesheet/style.css">
+</head>
+<body>
+<h1>JUST 课表导出</h1>
+<form action="/account" method="post">
+    <fieldset>
+        <div class="input-fill">
+            <input name="username" id="username" type="text" placeholder="账号" size="12">
+            <label for="username">账号</label>
+        </div>
+        <div class="input-fill">
+            <input name="password" id="password" type="text" placeholder="密码">
+            <label for="password">密码</label>
+        </div>
+        <div class="input-fill date-input">
+            <input name="date" id="date" type="text" placeholder="开学日期">
+            <label for="date">开学日期</label>
+        </div>
+        <input type="submit" value="Submit"/>
+
+    </fieldset>
+</form>
+
+<script src="/static/javascript/datepicker.js"></script>
+<script>
+  datepicker.init()
+</script>
+</body>
+</html>
