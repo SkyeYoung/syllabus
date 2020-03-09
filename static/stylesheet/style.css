@@ -37,30 +37,94 @@ fieldset {
 }
 
 .date-input > .date-picker {
-  opacity: 0;
-  pointer-events: none;
   position: absolute;
   transition: opacity 0.4s;
+  color: #333333;
+  padding: 8px 20px 16px;
+  border-radius: 4px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08), 0 -2px 4px rgba(0, 0, 0, 0.02);
+  opacity: 0;
+  pointer-events: none;
+  user-select: none;
 }
 .date-input > .date-picker.visible {
   opacity: 1;
   pointer-events: auto;
 }
 .date-input > .date-picker > header {
+  padding: 1.2em 0;
   text-align: center;
+  color: #333333;
+  font-size: 1.2em;
+  font-weight: lighter;
   display: flex;
   justify-content: space-around;
+  align-content: center;
 }
-.date-input > .date-picker > header span {
+.date-input > .date-picker > header span.icon {
   cursor: pointer;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  width: 26px;
+  height: 26px;
+  transition: background 0.2s;
+}
+.date-input > .date-picker > header span.icon:hover {
+  background-color: #2486ff;
+}
+.date-input > .date-picker > header span.icon:hover > i {
+  filter: brightness(100);
+}
+.date-input > .date-picker > header span.icon > i {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  vector-effect: non-scaling-stroke;
+}
+.date-input > .date-picker > header span.icon > i.prev {
+  background-image: url("data:image/svg+xml,%3Csvg class='icon' viewBox='0 0 1024 1024' xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cpath fill='%23333333' d='M687.83 96.1c-5.438-5.438-14.249-5.438-19.687 0L248.158 516.072a13.911 13.911 0 0 0-4.079 9.843c0 3.698 1.468 7.233 4.079 9.843l419.985 419.985c2.72 2.72 6.281 4.08 9.843 4.08s7.125-1.36 9.844-4.08c5.437-5.437 5.437-14.248 0-19.686L277.687 525.915 687.83 115.786c5.438-5.439 5.438-14.248 0-19.686z'/%3E%3C/svg%3E");
+}
+.date-input > .date-picker > header span.icon > i.next {
+  background-image: url("data:image/svg+xml,%3Csvg class='icon' viewBox='0 0 1024 1024' xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cpath fill='%23333333' d='M248.158 96.1c5.438-5.438 14.248-5.438 19.686 0L687.83 516.072a13.911 13.911 0 0 1 4.078 9.843c0 3.698-1.468 7.233-4.078 9.843L267.844 955.743c-2.719 2.72-6.28 4.08-9.843 4.08s-7.124-1.36-9.843-4.08c-5.438-5.437-5.438-14.248 0-19.686L658.3 525.915 248.158 115.786c-5.439-5.439-5.439-14.248 0-19.686z'/%3E%3C/svg%3E");
+}
+.date-input > .date-picker > main table {
+  border-collapse: collapse;
+}
+.date-input > .date-picker > main th {
+  color: #2486ff;
+  padding: 2px 0;
 }
 .date-input > .date-picker > main td {
   text-align: center;
   cursor: pointer;
-  padding: 2px 4px;
+  padding: 4px;
+  font-size: 12px;
+  transition: background 0.2s, color 0.2s;
 }
-.date-input > .date-picker > main td.not-this-month {
-  color: #d0d0d5;
+.date-input > .date-picker > main td > span {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+}
+.date-input > .date-picker > main td > span.not-this-month {
+  color: #999999;
+  cursor: not-allowed;
+}
+.date-input > .date-picker > main td > span.today {
+  color: #ffffff;
+  background-color: #2486ff;
+}
+.date-input > .date-picker > main td > span:not(.not-this-month):hover {
+  background-color: #e74c3c;
+  color: #ffffff;
 }
 
 /*# sourceMappingURL=style.css.map */

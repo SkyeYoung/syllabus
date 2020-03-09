@@ -77,9 +77,9 @@
       const monthDate = this.getMonthDate(year, month);
       
       let html = '<header>' +
-        '<span class="prev">&lt;</span>' +
+        '<span class="icon"><i class="prev"></i></span>' +
         `<span>${monthDate.year} 年 ${monthDate.month} 月</span>` +
-        '<span class="next">&gt;</span>' +
+        '<span class="icon"><i class="next"></i></span>' +
         '</header>' +
         '<main>' +
         '<table>' +
@@ -96,15 +96,20 @@
         '</thead>' +
         '<tbody>';
       
+      const today = new Date();
+      const isThisMonth = today.getFullYear() === monthDate.year && today.getMonth() === monthDate.month - 1;
+      
       for (let i = 0; i < monthDate.days.length; i++) {
         const date = monthDate.days[i];
         if (i % 7 === 0) {
           html += '<tr>';
         }
         if (date.date <= 0 || date.date > date.showDate) {
-          html += '<td data-day = ' + date.date + ' class = "not-this-month">' + date.showDate + '</td>';
+          html += '<td ><span data-day = ' + date.date + ' class = "not-this-month">' + date.showDate + '</span></td>';
+        } else if (isThisMonth && date.date === today.getDate()) {
+          html += '<td ><span data-day = ' + date.date + ' class = "today" title="今天">' + date.showDate + '</span></td>';
         } else {
-          html += '<td data-day = ' + date.date + '>' + date.showDate + '</td>';
+          html += '<td ><span data-day = ' + date.date + '>' + date.showDate + '</span></td>';
         }
         if (i % 7 === 6) {
           html += '</tr>'
@@ -132,7 +137,7 @@
       
       const input = dateInput.querySelector('input');
       const datePicker = document.querySelector('.date-picker');
-      datePicker.style.left = input.offsetWidth + 2 + 'px';
+      datePicker.style.left = input.offsetWidth + 6 + 'px';
       
       window.addEventListener('click', () => {
         datePicker.classList.remove('visible');
@@ -145,25 +150,29 @@
       
       datePicker.addEventListener('click', (event) => {
         const target = event.target;
-        console.log(date);
+        const targetClassList = target.classList;
         
-        if (target.classList.contains('prev')) {
+        if (targetClassList.contains('prev')) {
           event.stopPropagation();
           const {
             year, month
           } = this.calDate(date, {month: -1});
           date = this.render(year, month);
-        } else if (target.classList.contains('next')) {
+        } else if (targetClassList.contains('next')) {
           event.stopPropagation();
           const {
             year, month
           } = this.calDate(date, {month: 1});
           date = this.render(year, month);
         }
-        if (target.tagName.toLowerCase() === 'td') {
-          isOpen = false;
-          input.value = `${date.year} 年 ${date.month} 月 ${target.dataset.day} 日`;
-          input.dataset.value = `${date.year}-${date.month}-${target.dataset.day}`;
+        
+        if (target.tagName.toLowerCase() === 'span') {
+          if (!targetClassList.contains('not-this-month')) {
+            input.value = `${date.year} 年 ${date.month} 月 ${target.dataset.day} 日`;
+            input.dataset.value = `${date.year}-${date.month}-${target.dataset.day}`;
+          } else {
+            event.stopPropagation();
+          }
         }
       });
     }
