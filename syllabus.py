@@ -11,6 +11,7 @@ Let's Make Calendar Great Again!
 
 __author__ = 'iskye'
 
+import logging
 import re
 from datetime import datetime, timedelta
 from typing import Dict
@@ -121,39 +122,40 @@ def generate_syllabus(account_info: Dict[str, str], start_date: tuple) -> tuple 
     :return: ical 格式的课表和学期
     """
 
-    """登录"""
-    # 初始化 session
+    """初始化 session"""
     session = Session()
     session.mount('http://', HTTPAdapter(max_retries=2))
     session.mount('https://', HTTPAdapter(max_retries=2))
+
+    """登录"""
     # 登录 & 获取 cookie
     print(f'STEP: 登录系统\t{color_font("连接中...", "blue")}', end='\t')
     try:
         res = session.post(url=loginURL, data=account_info, timeout=10)
     except exceptions.RequestException:
-        print(f'\rSTEP: 登录系统\t{color_font("连接失败", "red")}')
-        return '连接失败'
-
-    login_html = BeautifulSoup(res.text, features='html.parser')
-    warnings = login_html.find_all('font', {'color': 'red'})
-    if len(warnings) > 0 and warnings[0].get_text() == '用户名或密码错误':
+        # 之所以这么写是因为 pycharm 不能正确解析 \b
         print(f'\rSTEP: 登录系统\t{color_font("失败", "red")}')
-        return '用户名或密码错误'
+        raise Exception('连接失败')
+    login_html = BeautifulSoup(res.text, features='lxml')
+    warnings = login_html.find_all('font', {'color': 'red'})
+    if len(warnings) > 0:
+        print(f'\rSTEP: 登录系统\t{color_font("失败", "red")}')
+        raise Exception('用户名或密码错误或不存在')
     else:
         print(f'\rSTEP: 登录系统\t{color_font("成功", "green")}')
 
     """获取学期时间 & 课表"""
     print('STEP: 获取课表', end='\t')
     # 获取网页
-    html = BeautifulSoup(session.get(url=syllabusURL).text, features='html.parser')
+    syllabus_html = BeautifulSoup(session.get(url=syllabusURL).text, features='lxml')
     # 获取学期时间
-    term = html.find(id='xnxq01id').find_all_next('option', {'selected': 'selected'})[0].get_text()
+    term = syllabus_html.find(id='xnxq01id').find_all_next('option', {'selected': 'selected'})[0].get_text()
     # 课表
-    tds = html.find(id='kbtable').find_all_next('div', class_='kbcontent')
+    tds = syllabus_html.find(id='kbtable').find_all_next('div', class_='kbcontent')
     # 存储课表信息
     class_table = []
     # 遍历获取课程信息
-    counter = 1
+    counter = 1  # 计数器
     for td in tds:
         # 提取文字
         class_info = [text for text in td.stripped_strings]
@@ -161,9 +163,10 @@ def generate_syllabus(account_info: Dict[str, str], start_date: tuple) -> tuple 
         class_list = []
         # 分别获取课程信息
         if len(class_info) >= 5:
-            class_list.append(ClassInfo(arr=class_info[0:5], semester=term, day=counter % 7, time=(counter - 1) // 7,
-                                        start_date=start_date)
-                              )
+            class_list.append(
+                ClassInfo(arr=class_info[0:5], semester=term, day=counter % 7, time=(counter - 1) // 7,
+                          start_date=start_date)
+            )
             if len(class_info) == 11:
                 class_list.append(
                     ClassInfo(arr=class_info[6:11], semester=term, day=counter % 7, time=(counter - 1) // 7,
@@ -221,11 +224,9 @@ if __name__ == '__main__':
     startDate = (2, 17)
 
     # 生成课表并导出
-    syllabusData = ''
     try:
-        syllabusData = generate_syllabus(account, startDate)
+        export_ics(generate_syllabus(account, startDate))
     except Exception as err:
-        # logging.exception(err)
-        print('\n', color_font(f'Error: {err}', 'red'))
+        print('\n' + color_font(f'Error: {err}', 'red'))
+        logging.exception(err)
         exit(1)
-    export_ics(syllabusData)
