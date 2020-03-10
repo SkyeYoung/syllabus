@@ -3,6 +3,8 @@
  */
 
 (function () {
+  "use strict";
+  
   window.datepicker = {
     calDate(date, gap) {
       if (!date.year || !date.month) {
@@ -77,9 +79,9 @@
       const monthDate = this.getMonthDate(year, month);
       
       let html = '<header>' +
-        '<span class="icon"><i class="prev"></i></span>' +
-        `<span>${monthDate.year} 年 ${monthDate.month} 月</span>` +
-        '<span class="icon"><i class="next"></i></span>' +
+        '<span class="btn"><i class="prev"></i></span>' +
+        `<span class="title">${monthDate.year} 年 ${monthDate.month} 月</span>` +
+        '<span class="btn"><i class="next"></i></span>' +
         '</header>' +
         '<main>' +
         '<table>' +
@@ -143,10 +145,13 @@
         datePicker.classList.remove('visible');
       });
       
-      input.addEventListener('click', (event) => {
+      const focus_input = (event) => {
         event.stopPropagation();
         datePicker.classList.add('visible');
-      });
+      };
+      
+      input.addEventListener('click', focus_input);
+      input.addEventListener('focus', focus_input);
       
       datePicker.addEventListener('click', (event) => {
         const target = event.target;
@@ -167,7 +172,7 @@
         }
         
         if (target.tagName.toLowerCase() === 'span') {
-          if (!targetClassList.contains('not-this-month')) {
+          if (!targetClassList.contains('not-this-month') && !targetClassList.contains('title')) {
             input.value = `${date.year} 年 ${date.month} 月 ${target.dataset.day} 日`;
             input.dataset.value = `${date.year}-${date.month}-${target.dataset.day}`;
           } else {

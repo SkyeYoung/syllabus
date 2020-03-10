@@ -1,10 +1,38 @@
 $default: #d0d0d5;
-$focus: #2486ff;
+$focus: rgba(#2486ff, 0.6);
 
-fieldset {
-  border-width: 0;
+* {
+  box-sizing: border-box;
 }
 
+body {
+  background-color: #fafbfc;
+}
+
+form {
+  display: inline-block;
+}
+
+fieldset {
+  background-color: #ffffff;
+  padding: 30px 50px 40px;
+  border-width: 0;
+  border-radius: 10px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08), 0 -2px 4px rgba(0, 0, 0, 0.02);
+  user-select: none;
+
+  &[disabled] {
+    input {
+      color: #999999;
+    }
+
+    label {
+      opacity: 0;
+    }
+  }
+}
+
+/* 输入控件 */
 .input-fill {
   position: relative;
   display: flex;
@@ -12,11 +40,18 @@ fieldset {
   margin: 30px 0;
 
   > input {
+    background-color: #fafafa;
+    color: #333333;
     padding: 14px 16px 14px;
-    border: 1px solid $default;
+    border: none;
     border-radius: 4px;
     outline: none;
-    width: 200px;
+    width: 230px;
+    letter-spacing: 1px;
+
+    &[type="password"] {
+      letter-spacing: 4px;
+    }
 
     &:focus {
       border-color: $focus;
@@ -35,23 +70,23 @@ fieldset {
 
   > label {
     color: $default;
-    background-color: #fff;
     left: 16px;
     padding: 0 2px;
     position: absolute;
     pointer-events: none;
     transform: translateY(-1px);
 
-    transition: transform 0.24s, color 0.24s;
+    transition: transform 0.24s, color 0.24s, opacity 0.24s;
   }
 }
 
+/* 日期输入控件，可结合输入控件使用 */
 .date-input {
   > .date-picker {
     position: absolute;
     transition: opacity 0.4s;
 
-    color: #333333;
+    background-color: #ffffff;
     padding: 8px 20px 16px;
     border-radius: 4px;
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08), 0 -2px 4px rgba(0, 0, 0, 0.02);
@@ -67,7 +102,6 @@ fieldset {
     > header {
       padding: 1.2em 0;
       text-align: center;
-      color: #333333;
       font-size: 1.2em;
       font-weight: lighter;
       display: flex;
@@ -75,7 +109,8 @@ fieldset {
       align-content: center;
 
       span {
-        &.icon {
+
+        &.btn {
           cursor: pointer;
           display: inline-flex;
           justify-content: center;
@@ -85,7 +120,7 @@ fieldset {
           height: 26px;
           transition: background 0.2s;
 
-          &:hover {
+          &:hover, &:focus {
             background-color: $focus;
 
             > i {
@@ -111,8 +146,6 @@ fieldset {
             }
           }
         }
-
-
       }
     }
 
@@ -159,5 +192,47 @@ fieldset {
         }
       }
     }
+  }
+}
+
+/* 提交按钮 */
+input[type="submit"] {
+  // 重置
+  border: unset;
+  background-color: unset;
+  outline: none;
+
+  width: 100%;
+  font-size: 1.4em;
+  font-weight: 800;
+  color: #cccccc;
+  cursor: pointer;
+
+  transition: background 0.24s;
+
+  &:hover {
+    color: $focus;
+    animation: shake 0.3s infinite;
+  }
+}
+
+@keyframes shake {
+  0%, 100% {
+    transform: translateX(0) translateY(0)
+  }
+  25% {
+    transform: translateX(0.02em) translateY(.06em)
+  }
+  34% {
+    transform: translateX(0.01em) translateY(-0.02em)
+  }
+  54% {
+    transform: translateX(0.03em) translateY(0.03em)
+  }
+  75% {
+    transform: translateX(-0.05em) translateY(0.05em)
+  }
+  90% {
+    transform: translateX(0.04em) translateY(-0.04em)
   }
 }

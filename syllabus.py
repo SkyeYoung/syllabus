@@ -73,7 +73,15 @@ class ClassInfo:
         return f'课程号：{self.id}，课程名：{self.name}，教师：{self.teacher}，周次：{self.week_range_text}，上课地点：{self.classroom}'
 
 
+class StepError(Exception):
+    """自定义的步骤异常，用于记录生成步骤中的自定义错误"""
+
+    def __init__(self, *args):
+        self.args = args
+
+
 def color_font(content: str, color: str) -> str:
+    """彩色字体，仅前景色为彩色"""
     color_dict = {
         'red': 31,
         'green': 32,
@@ -135,12 +143,12 @@ def generate_syllabus(account_info: Dict[str, str], start_date: tuple) -> tuple:
     except exceptions.RequestException:
         # 之所以这么写是因为 pycharm 不能正确解析 \b
         print(f'\rSTEP: 登录系统\t{color_font("失败", "red")}')
-        raise Exception('连接失败')
+        raise StepError('连接失败')
     login_html = BeautifulSoup(res.text, features='lxml')
     warnings = login_html.find_all('font', {'color': 'red'})
     if len(warnings) > 0:
         print(f'\rSTEP: 登录系统\t{color_font("失败", "red")}')
-        raise Exception('用户名或密码错误或不存在')
+        raise StepError('用户名、密码错误或不存在')
     else:
         print(f'\rSTEP: 登录系统\t{color_font("成功", "green")}')
 

@@ -10,26 +10,26 @@
 </head>
 <body>
 <h1>JUST 课表导出</h1>
-<form action="/account" method="post">
+<form id="form" action="/export" method="post">
     <fieldset>
         <div class="input-fill">
-            <input name="username" id="username" type="text" placeholder="账号" size="12">
+            <input name="username" id="username" type="text" placeholder="账号" size="12" autocomplete="off" required/>
             <label for="username">账号</label>
         </div>
         <div class="input-fill">
-            <input name="password" id="password" type="text" placeholder="密码">
+            <input name="password" id="password" type="password" placeholder="密码" autocomplete="off" required/>
             <label for="password">密码</label>
         </div>
         <div class="input-fill date-input">
-            <input name="date" id="date" type="text" placeholder="开学日期">
+            <input name="date" id="date" type="text" placeholder="开学日期" autocomplete="off" required/>
             <label for="date">开学日期</label>
         </div>
-        <input type="submit" value="Submit"/>
-
+        <input type="submit" value="EXPORT"/>
     </fieldset>
 </form>
 
 <script src="/static/javascript/datepicker.js"></script>
+<script src="/static/javascript/form.js"></script>
 <script>
   datepicker.init()
 </script>
