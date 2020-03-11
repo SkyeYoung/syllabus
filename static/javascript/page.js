@@ -6,11 +6,15 @@
   const pageCount = sections.length;
   const nav = document.querySelector("#page-nav");
   
+  /**
+   * 将页面指示器加入 nav 中
+   * @type {string}
+   */
   let html = '<ul>';
   
   for (let i = 0; i < pageCount; i++) {
-    html += `<li ${i === 0 ? 'class="on"' : ''}><div><span class="title">${sections[i].dataset.title}</span>`
-      + '<span class="dot"></span></div></li>';
+    html += `<li class="${i === 0 ? 'on' : ''}"><div><span class="title">${sections[i].dataset.title}</span>`
+      + `<span class="dot"  data-num="${i}"></span></div></li>`;
   }
   
   html += '</ul>';
@@ -19,26 +23,53 @@
   const navEle = nav.querySelectorAll("li");
   
   /**
-   * 切换页面
+   * 切换页面事件
    * @type {number}
    */
-  let transY = 0, pageNum = 0;
+  let pageNum = 0;
+  let isUsed = false;
   window.addEventListener("wheel", (event) => {
     const y = Math.floor(event.deltaY);
     
-    if (y < -30 && pageNum > 0) {
-      navEle[pageNum].classList.remove("on");
-      pageNum--;
-      navEle[pageNum].classList.add("on");
-      transY = pageNum * 100;
-    } else if (y > 30 && pageNum > -1 && pageNum < pageCount - 1) {
-      navEle[pageNum].classList.remove("on");
-      pageNum++;
-      navEle[pageNum].classList.add("on");
-      transY = pageNum * 100;
+    if (!isUsed) {
+      if (y < -30 && pageNum > 0) {
+        navEle[pageNum].classList.remove("on");
+        pageNum--;
+        navEle[pageNum].classList.add("on");
+        //加锁
+        isUsed = true;
+      } else if (y > 30 && pageNum > -1 && pageNum < pageCount - 1) {
+        navEle[pageNum].classList.remove("on");
+        pageNum++;
+        navEle[pageNum].classList.add("on");
+        //加锁
+        isUsed = true;
+      }
+      
+      page.style.transform = `translateY(-${pageNum * 100}vh)`;
     }
-    
-    page.style.transform = `translateY(-${transY}vh)`;
   });
   
+  /**
+   * 点击页面指示器切换事件
+   */
+  window.addEventListener("click", (event) => {
+    const target = event.target;
+    
+    if (target.classList.contains("dot")) {
+      navEle[pageNum].classList.remove("on");
+      // 使用上面的 pageNum 存储
+      pageNum = parseInt(target.dataset.num);
+      navEle[pageNum].classList.add("on");
+      
+      page.style.transform = `translateY(-${pageNum * 100}vh)`;
+    }
+  });
+  
+  /**
+   * 解锁
+   */
+  page.addEventListener("transitionend", () => {
+    isUsed = false;
+  });
 })();
