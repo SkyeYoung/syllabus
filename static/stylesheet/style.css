@@ -1,4 +1,5 @@
 @charset "UTF-8";
+/* Base Part */
 * {
   box-sizing: border-box;
 }
@@ -11,29 +12,46 @@ html, body {
 
 body {
   background-color: #fafbfc;
-  display: flex;
-  align-items: center;
-}
-
-.vertical-hr {
-  height: 14vh;
-  width: 2px;
-  background-color: #000;
-  margin: 0 66px;
 }
 
 code {
+  color: #cccccc;
   background-color: #f1f2f3;
   border-radius: 3px;
+  font-family: sans-serif;
   font-size: 90%;
   padding: 2px 4px;
 }
 
-.content {
-  font-size: 12px;
+a {
+  color: rgba(36, 134, 255, 0.6);
+  text-decoration: none;
 }
 
-form {
+#content {
+  font-size: 14px;
+  color: #999999;
+}
+#content h1 {
+  color: #666666;
+}
+
+#title {
+  width: 400px;
+  height: 400px;
+}
+
+#github {
+  width: 60px;
+  height: 60px;
+  position: fixed;
+  right: 0;
+  top: 0;
+  cursor: pointer;
+}
+
+/* Form Part */
+#form {
   display: inline-block;
 }
 
@@ -47,13 +65,13 @@ fieldset {
 }
 fieldset[disabled] input {
   color: #999999;
+  cursor: not-allowed;
 }
 fieldset[disabled] input[type=submit] {
   color: #d0d0d5;
-  cursor: not-allowed;
 }
 fieldset[disabled] label {
-  opacity: 0;
+  color: #d0d0d5 !important;
 }
 
 /* 输入控件 */
@@ -85,6 +103,9 @@ fieldset[disabled] label {
 .input-fill > input:not(:placeholder-shown) ~ label, .input-fill > input:focus ~ label {
   color: rgba(36, 134, 255, 0.6);
   transform: scale(0.75) translateY(-28px);
+  background-color: rgba(36, 134, 255, 0.1);
+  border-radius: 2px;
+  padding: 0 8px;
 }
 .input-fill > label {
   color: #d0d0d5;
@@ -93,9 +114,46 @@ fieldset[disabled] label {
   position: absolute;
   pointer-events: none;
   transform: translateY(-1px);
-  transition: transform 0.24s, color 0.24s, opacity 0.24s;
+  transition: transform 0.24s, color 0.24s;
 }
 
+/* 提交按钮 */
+input[type=submit] {
+  border: unset;
+  background-color: unset;
+  outline: none;
+  width: 100%;
+  font-size: 1.4em;
+  font-weight: 800;
+  color: #cccccc;
+  cursor: pointer;
+  transition: color 0.4s;
+}
+input[type=submit]:hover {
+  color: rgba(36, 134, 255, 0.6);
+  animation: shake 0.3s infinite;
+}
+
+@keyframes shake {
+  0%, 100% {
+    transform: translateX(0) translateY(0);
+  }
+  25% {
+    transform: translateX(0.02em) translateY(0.06em);
+  }
+  34% {
+    transform: translateX(0.01em) translateY(-0.02em);
+  }
+  54% {
+    transform: translateX(0.03em) translateY(0.03em);
+  }
+  75% {
+    transform: translateX(-0.05em) translateY(0.05em);
+  }
+  90% {
+    transform: translateX(0.04em) translateY(-0.04em);
+  }
+}
 /* 日期输入控件，可结合输入控件使用 */
 .date-input > .date-picker {
   position: absolute;
@@ -186,43 +244,7 @@ fieldset[disabled] label {
   color: #ffffff;
 }
 
-/* 提交按钮 */
-input[type=submit] {
-  border: unset;
-  background-color: unset;
-  outline: none;
-  width: 100%;
-  font-size: 1.4em;
-  font-weight: 800;
-  color: #cccccc;
-  cursor: pointer;
-  transition: color 0.4s;
-}
-input[type=submit]:hover {
-  color: rgba(36, 134, 255, 0.6);
-  animation: shake 0.3s infinite;
-}
-
-@keyframes shake {
-  0%, 100% {
-    transform: translateX(0) translateY(0);
-  }
-  25% {
-    transform: translateX(0.02em) translateY(0.06em);
-  }
-  34% {
-    transform: translateX(0.01em) translateY(-0.02em);
-  }
-  54% {
-    transform: translateX(0.03em) translateY(0.03em);
-  }
-  75% {
-    transform: translateX(-0.05em) translateY(0.05em);
-  }
-  90% {
-    transform: translateX(0.04em) translateY(-0.04em);
-  }
-}
+/* Notification Part */
 /* 提醒 */
 .notification {
   border-radius: 10px;
@@ -298,14 +320,151 @@ input[type=submit]:hover {
   cursor: pointer;
 }
 
-#github {
-  width: 60px;
-  height: 60px;
+.loader {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  pointer-events: none;
+}
+.loader div {
   position: absolute;
+  width: 38px;
+  height: 38px;
+  opacity: 0;
+  transform: rotate(225deg);
+  animation-iteration-count: infinite;
+  animation-name: orbit;
+  animation-duration: 5.5s;
+}
+.loader div:after {
+  content: "";
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border-radius: 5px;
+  background: rgba(36, 134, 255, 0.6);
+}
+.loader div:nth-child(2) {
+  animation-delay: 240ms;
+}
+.loader div:nth-child(3) {
+  animation-delay: 480ms;
+}
+.loader div:nth-child(4) {
+  animation-delay: 720ms;
+}
+.loader div:nth-child(5) {
+  animation-delay: 960ms;
+}
+
+@keyframes orbit {
+  0% {
+    transform: rotate(225deg);
+    opacity: 1;
+    animation-timing-function: ease-out;
+  }
+  7% {
+    transform: rotate(345deg);
+    animation-timing-function: linear;
+  }
+  30% {
+    transform: rotate(455deg);
+    animation-timing-function: ease-in-out;
+  }
+  39% {
+    transform: rotate(690deg);
+    animation-timing-function: linear;
+  }
+  70% {
+    transform: rotate(815deg);
+    opacity: 1;
+    animation-timing-function: ease-out;
+  }
+  75% {
+    transform: rotate(945deg);
+    animation-timing-function: ease-out;
+  }
+  76% {
+    transform: rotate(945deg);
+    opacity: 0;
+  }
+  100% {
+    transform: rotate(945deg);
+    opacity: 0;
+  }
+}
+/* Page Part */
+body {
+  overflow: hidden;
+}
+
+#page {
+  overflow: hidden;
+  transition: transform 0.4s;
+  transition-timing-function: cubic-bezier(0.18, 0.89, 0.32, 1.28);
+}
+#page > .section {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#page-nav {
+  position: fixed;
   right: 0;
-  top: 0;
-  z-index: 20;
+  width: 60px;
+  top: 50vh;
+  transform: translateY(-50%);
+}
+#page-nav > ul {
+  list-style: none;
+}
+#page-nav > ul > li {
   cursor: pointer;
+  display: block;
+  width: 14px;
+  height: 14px;
+  margin: 0 0 4px -20px;
+}
+#page-nav > ul > li.on > div > .dot {
+  width: 14px;
+  height: 14px;
+}
+#page-nav > ul > li:hover > div > .title {
+  opacity: 1;
+}
+#page-nav > ul > li:hover > div > .dot {
+  opacity: 1;
+}
+#page-nav > ul > li:not(.on):hover > div > .dot {
+  width: 8px;
+  height: 8px;
+}
+#page-nav > ul > li > div {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+#page-nav > ul > li > div > .title {
+  display: block;
+  position: absolute;
+  left: -20px;
+  width: fit-content;
+  color: #999999;
+  opacity: 0;
+}
+#page-nav > ul > li > div > .dot {
+  display: block;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background-color: #666666;
+  transition: all 0.1s ease-in-out;
 }
 
 /*# sourceMappingURL=style.css.map */

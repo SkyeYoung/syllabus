@@ -7,38 +7,47 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>JUST 课表导出</title>
     <link rel="stylesheet" href="/static/stylesheet/style.css">
-    <link rel="stylesheet" href="/static/stylesheet/loader.css">
 </head>
 <body>
-<canvas></canvas>
-<form id="form" action="/export" method="post">
-    <fieldset>
-        <div class="input-fill">
-            <input name="username" id="username" type="text" placeholder="账号" size="12" autocomplete="off" required/>
-            <label for="username">账号</label>
+<div id="page">
+    <div class="section" data-title="主页">
+        <canvas id="title"></canvas>
+        <form id="form" action="/export" method="post">
+            <fieldset>
+                <div class="input-fill">
+                    <input name="username" id="username" type="text" placeholder="账号" size="12" autocomplete="off"
+                           required/>
+                    <label for="username">账号</label>
+                </div>
+                <div class="input-fill">
+                    <input name="password" id="password" type="password" placeholder="密码" autocomplete="off" required/>
+                    <label for="password">密码</label>
+                </div>
+                <div class="input-fill date-input">
+                    <input name="date" id="date" type="text" placeholder="开学日期" autocomplete="off" required/>
+                    <label for="date">开学日期</label>
+                </div>
+                <input type="submit" value="EXPORT"/>
+            </fieldset>
+        </form>
+    </div>
+    <div class="section" data-title="说明">
+        <div id="content">
+            <h1>食用指南</h1>
+            <p>依次输入教务系统的账号、密码，并选择正式开学的日期（程序依此计算上课日期）。</p>
+            <p>点击 <code>EXPORT</code> 按钮。</p>
+            <p>如果没有意外，ics 文件很快就会被下载到你的电脑中。</p>
+            <h1>几点说明</h1>
+            <p>本工具由 <a href="https://github.com/SkyeYoung" target="_blank">Skye Young</a> 开发，使用 <a
+                    href="https://github.com/JUST-NC/syllabus/blob/master/LICENSE" target="_blank">MIT</a> 协议进行开源。</p>
+            <p>本工具将江苏科技大学的课表导出为 ics 格式，以便导入各类日历应用。</p>
+            <p>本工具产生于本人刚开始学习 Python 的过程中，代码可能非常混乱。</p>
+            <p>本工具为兴趣使然的产物，可能不会修 Bug 。</p>
         </div>
-        <div class="input-fill">
-            <input name="password" id="password" type="password" placeholder="密码" autocomplete="off" required/>
-            <label for="password">密码</label>
-        </div>
-        <div class="input-fill date-input">
-            <input name="date" id="date" type="text" placeholder="开学日期" autocomplete="off" required/>
-            <label for="date">开学日期</label>
-        </div>
-        <input type="submit" value="EXPORT"/>
-    </fieldset>
-</form>
-<div class="vertical-hr"></div>
-<div class="content">
-    <h1>食用指南</h1>
-    <p>依次输入教务系统的账号、密码，并选择正式开学的日期。</p>
-    <p>点击 <code>EXPORT</code> 按钮。</p>
-    <p>如果没有意外，ics 文件很快就会被下载到你的电脑中。</p>
-    <h1>几点说明</h1>
-    <p>本工具将江苏科技大学的课表导出为 ics 格式，以便导入各类日历应用。</p>
-    <p>本工具产生于刚开始学习 Python 的过程中，代码可能非常混乱。</p>
-    <p>本工具为兴趣使然的产物，不会修 Bug 。</p>
+    </div>
 </div>
+
+<nav id="page-nav"></nav>
 
 <div class="notification">
     <div class="loader">
@@ -62,12 +71,12 @@
     </a>
 </div>
 
+<!-- leon sans-->
 <script src="/static/javascript/leon.js"></script>
+
+<script src="/static/javascript/page.js"></script>
 <script src="/static/javascript/datepicker.js"></script>
 <script src="/static/javascript/form.js"></script>
-<script src="/static/javascript/title.js"></script>
-<script>
-  datepicker.init()
-</script>
+<script src="/static/javascript/config.js"></script>
 </body>
 </html>

@@ -1,0 +1,120 @@
+#form {
+  display: inline-block;
+}
+
+fieldset {
+  background-color: #ffffff;
+  padding: 30px 50px 40px;
+  border-width: 0;
+  border-radius: 10px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08), 0 -2px 4px rgba(0, 0, 0, 0.02);
+  user-select: none;
+
+  &[disabled] {
+    input {
+      color: #999999;
+      cursor: not-allowed;
+    }
+
+    input[type="submit"] {
+      color: $default;
+    }
+
+    label {
+      color: $default !important;
+    }
+  }
+}
+
+/* 输入控件 */
+.input-fill {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin: 30px 0;
+
+  > input {
+    background-color: #fafafa;
+    color: #666666;
+    padding: 14px 16px 14px;
+    border: none;
+    border-radius: 4px;
+    outline: none;
+    width: 230px;
+    letter-spacing: 1px;
+
+    &[type="password"] {
+      letter-spacing: 4px;
+    }
+
+    &:focus {
+      border-color: $focus;
+    }
+
+    &:placeholder-shown::placeholder {
+      color: transparent;
+    }
+
+    &:not(:placeholder-shown) ~ label,
+    &:focus ~ label {
+      color: $focus;
+      transform: scale(0.75) translateY(-28px);
+      background-color: rgba(36, 134, 255, 0.1);
+      border-radius: 2px;
+      padding: 0 8px;
+    }
+  }
+
+  > label {
+    color: $default;
+    left: 16px;
+    padding: 0 2px;
+    position: absolute;
+    pointer-events: none;
+    transform: translateY(-1px);
+
+    transition: transform 0.24s, color 0.24s;
+  }
+}
+
+/* 提交按钮 */
+input[type="submit"] {
+  // 重置
+  border: unset;
+  background-color: unset;
+  outline: none;
+
+  width: 100%;
+  font-size: 1.4em;
+  font-weight: 800;
+  color: #cccccc;
+  cursor: pointer;
+
+  transition: color 0.4s;
+
+  &:hover {
+    color: $focus;
+    animation: shake 0.3s infinite;
+  }
+}
+
+@keyframes shake {
+  0%, 100% {
+    transform: translateX(0) translateY(0)
+  }
+  25% {
+    transform: translateX(0.02em) translateY(.06em)
+  }
+  34% {
+    transform: translateX(0.01em) translateY(-0.02em)
+  }
+  54% {
+    transform: translateX(0.03em) translateY(0.03em)
+  }
+  75% {
+    transform: translateX(-0.05em) translateY(0.05em)
+  }
+  90% {
+    transform: translateX(0.04em) translateY(-0.04em)
+  }
+}
