@@ -31,8 +31,10 @@
 
 ### Web 版低清截图
 
-![首页](/images/web_screenshot_1.png)
-![说明](/images/web_screenshot_2.png)
+
+<img src="/images/web_screenshot_1.png" alt="首页" height="200">
+<img src="/images/web_screenshot_2.png" alt="说明" height="200">
+
 
 ### 为什么写这个程序
 我曾经看到一篇[文章](https://hfo4.github.io/2017/12/22/e5-b0-86-e8-af-be-e8-a1-a8-e5-af-bc-e5-85-a5-e6-97-a5-e5-8e-86-ef-bc-8c-e8-ae-a9-e6-97-a5-e5-8e-86-e5-86-8d-e6-ac-a1-e4-bc-9f-e5-a4-a7/)，其作者创造了个类似的程序。可惜，我看的时候那个网页已经不能正常访问了，而且我们的教务系统并不一样。所以乘着开始学 Python ，我自己就尝试着实现一下。
@@ -41,11 +43,7 @@
 
 ### 下一步计划
 
-1. 图形界面版本
+- [ ] 图形界面版本
+- [ ] 写一下注释
 
-   应该会用到很多 Python 的东西。Web 版写那么多前端的东西真是意料外的事。
-
-2. 写一下注释
-
-   有空就写……
 
