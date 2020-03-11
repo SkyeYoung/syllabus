@@ -1,5 +1,6 @@
 (function () {
   "use strict";
+  
   const page = document.querySelector("#page");
   const sections = page.querySelectorAll(".section");
   const pageCount = sections.length;

@@ -111,7 +111,7 @@
         } else if (isThisMonth && date.date === today.getDate()) {
           html += '<td ><span data-day = ' + date.date + ' class = "today" title="今天">' + date.showDate + '</span></td>';
         } else {
-          html += '<td ><span data-day = ' + date.date + '>' + date.showDate + '</span></td>';
+          html += '<td ><span data-day = ' + date.date + ' class= "this-month">' + date.showDate + '</span></td>';
         }
         if (i % 7 === 6) {
           html += '</tr>'
@@ -171,8 +171,8 @@
           date = this.render(year, month);
         }
         
-        if (target.tagName.toLowerCase() === 'span') {
-          if (!targetClassList.contains('not-this-month') && !targetClassList.contains('title')) {
+        if (target.tagName.toLowerCase() === "span") {
+          if (targetClassList.contains("this-month")) {
             input.value = `${date.year} 年 ${date.month} 月 ${target.dataset.day} 日`;
             input.dataset.value = `${date.year}-${date.month}-${target.dataset.day}`;
           } else {
