@@ -1,6 +1,7 @@
 # JUST 课表导出
 
-![author-Skye](https://img.shields.io/badge/author-Skye-8F77B5.svg)![license-MIT](https://img.shields.io/github/license/JUST-NC/syllabus)
+![author-Skye](https://img.shields.io/badge/author-Skye-8F77B5.svg)
+![license-MIT](https://img.shields.io/github/license/JUST-NC/syllabus)
 
 > 初学 Python 时的练手产物。
 
