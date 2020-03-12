@@ -113,7 +113,8 @@ def get_cal_event(info: ClassInfo, *, start_week=0, end_week=1) -> Event:
     event.add('trigger', start_time - timedelta(minutes=20))
     # 重复的日期，以及在哪一周结束
     event.add('rrule', {'freq': 'weekly', 'interval': '1', 'byday': info.week_text,
-                        'until': start_time + timedelta(weeks=info.week_range[end_week] - 1)})
+                        'until': start_time + timedelta(
+                            weeks=(info.week_range[end_week] - info.week_range[start_week]))})
     # 课程名
     event.add('summary', info.name)
     # 其余课程信息
@@ -143,7 +144,7 @@ def generate_syllabus(account_info: Dict[str, str], start_date: tuple) -> tuple:
     except exceptions.RequestException:
         # 之所以这么写是因为 pycharm 不能正确解析 \b
         print(f'\rSTEP: 登录系统\t{color_font("失败", "red")}')
-        raise StepError('连接失败')
+        raise StepError('登录失败，请再试一次')
     login_html = BeautifulSoup(res.text, features='lxml')
     warnings = login_html.find_all('font', {'color': 'red'})
     if len(warnings) > 0:

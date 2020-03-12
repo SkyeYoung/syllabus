@@ -20,8 +20,9 @@
     leon = new LeonSans({
       text: 'JUST\nSyllabus\nExport',
       color: ['#000000'],
+      tracking: 0.2,
       size: 80,
-      weight: 100
+      weight: 100,
     });
     
     requestAnimationFrame(animate);

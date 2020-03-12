@@ -39,6 +39,7 @@ a {
 #title {
   width: 400px;
   height: 400px;
+  margin-inline-end: 80px;
 }
 
 #github {
