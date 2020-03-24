@@ -1,5 +1,4 @@
 QMainWindow{
-    background-color: #ffffff;
     min-width: 640px;
-    min-height: 480px;
+    min-height: 400px;
 }
