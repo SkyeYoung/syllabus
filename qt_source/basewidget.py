@@ -222,27 +222,15 @@ class RawWindow(QMainWindow):
         painter.drawPixmap(SHADOW_SIZE, self.height() - SHADOW_SIZE, self.width() - 2 * SHADOW_SIZE,
                            SHADOW_SIZE, QPixmap(pixmaps[5]).scaled(self.width() - 2 * SHADOW_SIZE, SHADOW_SIZE))
 
-    def move_center(self) -> None:
-        """窗口居中"""
-        # 屏幕几何信息
-        screen = QDesktopWidget().geometry()
-        # 窗口几何信息
-        window = self.geometry()
-        # 移动窗口
-        self.move((screen.width() - window.width()) / 2, (screen.height() - window.height()) / 2)
-
-    def paintEvent(self, event: QtGui.QPaintEvent) -> None:
-        """调用 draw_shadow 绘制阴影
-        """
-        painter = QPainter(self)
-        self.__draw_shadow(painter)
-
     def set_window_flags(self, type_: typing.Union[Qt.WindowFlags, Qt.WindowType]) -> None:
+        """模拟 setWindowFlags """
 
+        # 直接调用无效
         if type_ is None:
             return
 
         flags = (Qt.WindowMinimizeButtonHint, Qt.WindowMaximizeButtonHint, Qt.WindowCloseButtonHint)
+        # flags 的所有子集
         flags_collection = get_collection_of_children(*flags)
 
         for flag_col in flags_collection:
@@ -260,6 +248,20 @@ class RawWindow(QMainWindow):
                     self.__title_bar.enable_btn('close_btn', True)
                 # 既然找到了就可以不再继续了
                 break
+
+    def move_center(self) -> None:
+        """窗口居中"""
+        # 屏幕几何信息
+        screen = QDesktopWidget().geometry()
+        # 窗口几何信息
+        window = self.geometry()
+        # 移动窗口
+        self.move((screen.width() - window.width()) / 2, (screen.height() - window.height()) / 2)
+
+    def paintEvent(self, event: QtGui.QPaintEvent) -> None:
+        """调用 draw_shadow 绘制阴影"""
+        painter = QPainter(self)
+        self.__draw_shadow(painter)
 
 
 class BaseWindow(QWidget):
