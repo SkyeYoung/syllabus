@@ -1,0 +1,5 @@
+Flask==1.1.1
+icalendar==4.0.5
+requests==2.23.0
+beautifulsoup4==4.8.2
+PyQt5==5.14.1
