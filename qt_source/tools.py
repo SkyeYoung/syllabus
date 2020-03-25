@@ -3,6 +3,8 @@
 
 __author__ = 'iskye'
 
+import os
+
 
 def load_qss(file_road):
     """导入 .qss 文件"""
@@ -33,3 +35,8 @@ def get_bit_or_all(items: list):
         for item in items:
             result |= item
         return result
+
+
+def abs_path(road: str):
+    """绝对路径，用于解决资源路径问题"""
+    return os.path.dirname(os.path.abspath(__file__)).replace('\\', '/') + road

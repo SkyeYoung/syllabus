@@ -11,16 +11,3 @@ QPushButton{
 QPushButton:hover{
     background: #e5e5e5;
 }
-
-QPushButton#Close{
-    border-image:url(images/icon/close.png);
-}
-
-QPushButton#Close:hover{
-    background: #e81123;
-    border-image:url(images/icon/close-hover.png);
-}
-
-QPushButton#Close:disabled{
-    border-image:url(images/icon/close-disable.png);
-}

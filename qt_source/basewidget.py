@@ -47,7 +47,7 @@ class RawTitleBar(QWidget):
 
         """设置样式"""
         self.setAttribute(Qt.WA_StyledBackground, True)  # 设置这个才能设置 QWidget 的背景色
-        self.setStyleSheet(load_qss('style/rawtitlebar.qss'))
+        self.setStyleSheet(load_qss(abs_path('/style/rawtitlebar.qss')))
 
         """三大按钮"""
         # 初始化三大按钮
@@ -61,11 +61,16 @@ class RawTitleBar(QWidget):
         self.__close_btn.setFixedSize(BTN_WIDTH, BTN_HEIGHT)
 
         # 设置两大按钮图标
-        self.__min_btn.setIcon(QIcon('images/icon/minimize.png'))
-        self.__max_btn.setIcon(QIcon('images/icon/maximize.png'))
+        self.__min_btn.setIcon(QIcon(abs_path('/images/icon/minimize.png')))
+        self.__max_btn.setIcon(QIcon(abs_path('/images/icon/maximize.png')))
 
         # 关闭按钮额外设置
-        self.__close_btn.setObjectName('Close')
+        self.__close_btn.setStyleSheet(
+            'QPushButton{border-image:url(' + abs_path('/images/icon/close.png') + ');}' +  # 按钮正常状态
+            'QPushButton:hover{background: #e81123;' +
+            'border-image:url(' + abs_path('/images/icon/close-hover.png') + ');}' +  # 鼠标悬浮状态
+            'QPushButton:disabled{' +
+            f'border-image:url(' + abs_path('/images/icon/close-disable.png') + ');}')  # 按钮禁用状态
 
         # 设置三大按钮图标大小
         self.__min_btn.setIconSize(QSize(24, 21))
@@ -100,12 +105,12 @@ class RawTitleBar(QWidget):
         if self.__win.isMaximized():
             self.__win.showNormal()
             # 调整为全屏图标
-            self.__max_btn.setIcon(QIcon('images/icon/maximize.png'))
+            self.__max_btn.setIcon(QIcon(abs_path('/images/icon/maximize.png')))
             self.__win_layout.setContentsMargins(SHADOW_SIZE, SHADOW_SIZE, SHADOW_SIZE, SHADOW_SIZE)
         else:
             self.__win.showMaximized()
             # 调整为重置图标
-            self.__max_btn.setIcon(QIcon('images/icon/restore.png'))
+            self.__max_btn.setIcon(QIcon(abs_path('/images/icon/restore.png')))
             self.__win_layout.setContentsMargins(0, 0, 0, 0)
 
     def __close_window(self) -> None:
@@ -120,7 +125,7 @@ class RawTitleBar(QWidget):
         elif btn_name == 'close_btn':
             self.__close_btn.setEnabled(is_enable)
         else:
-            raise Exception('标题栏按键名错误')
+            raise Exception('按钮名称错误')
 
     def mouseDoubleClickEvent(self, event: QtGui.QMouseEvent) -> None:
         """重写，鼠标双击事件"""
@@ -189,14 +194,14 @@ class RawWindow(QMainWindow):
         ※ 参考 https://www.jianshu.com/p/add4d4778bd3
         """
         pixmaps = list()
-        pixmaps.append('images/shadow/left_top.png')
-        pixmaps.append('images/shadow/left_bottom.png')
-        pixmaps.append('images/shadow/right_top.png')
-        pixmaps.append('images/shadow/right_bottom.png')
-        pixmaps.append('images/shadow/top_mid.png')
-        pixmaps.append('images/shadow/bottom_mid.png')
-        pixmaps.append('images/shadow/left_mid.png')
-        pixmaps.append('images/shadow/right_mid.png')
+        pixmaps.append(abs_path('/images/shadow/left_top.png'))
+        pixmaps.append(abs_path('/images/shadow/left_bottom.png'))
+        pixmaps.append(abs_path('/images/shadow/right_top.png'))
+        pixmaps.append(abs_path('/images/shadow/right_bottom.png'))
+        pixmaps.append(abs_path('/images/shadow/top_mid.png'))
+        pixmaps.append(abs_path('/images/shadow/bottom_mid.png'))
+        pixmaps.append(abs_path('/images/shadow/left_mid.png'))
+        pixmaps.append(abs_path('/images/shadow/right_mid.png'))
 
         # 左上角
         painter.drawPixmap(0, 0, SHADOW_SIZE, SHADOW_SIZE, QPixmap(pixmaps[0]))
@@ -276,7 +281,7 @@ class BaseWindow(QWidget):
 
         """设置样式"""
         self.setAttribute(Qt.WA_StyledBackground, True)  # 设置这个才能设置 QWidget 的背景色
-        self.setStyleSheet(load_qss('style/basewindow.qss'))
+        self.setStyleSheet(load_qss(abs_path('/style/basewindow.qss')))
 
     def move_center(self) -> None:
         """窗口居中"""
