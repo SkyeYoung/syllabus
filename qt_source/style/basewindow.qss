@@ -1,4 +1,3 @@
-QMainWindow{
-    min-width: 640px;
-    min-height: 400px;
+QWidget{
+    background-color: #ffffff;
 }
