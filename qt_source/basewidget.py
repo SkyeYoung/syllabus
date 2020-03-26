@@ -18,7 +18,7 @@ BAR_HEIGHT = 24  # 标题高度
 BTN_WIDTH = 24  # 按钮宽度
 BTN_HEIGHT = 21  # 按钮高度
 LABEL_SIZE = 24  # 标签尺寸
-SHADOW_SIZE = 8  # 阴影尺寸
+SHADOW_SIZE = 6  # 阴影尺寸
 
 
 class RawTitleBar(QWidget):
@@ -269,7 +269,7 @@ class RawWindow(QMainWindow):
         self.__draw_shadow(painter)
 
 
-class BaseWindow(QWidget):
+class BaseWindow(QMainWindow):
     """基础窗体
     样式参考了 Telegram 的桌面版。
     """

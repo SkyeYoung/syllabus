@@ -23,6 +23,6 @@ if __name__ == '__main__':
     base_window.resize(640, 400)
     base_window.move_center()
     base_window.setWindowIcon(QIcon('./qt_source/images/icon/logo.png'))
-    base_window.setWindowTitle('江科大课表导出 Syllabus Export')
+    base_window.setWindowTitle('江科大课表导出 v1.0')
     base_window.show()
     sys.exit(app.exec_())
