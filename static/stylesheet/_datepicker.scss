@@ -2,19 +2,32 @@
 .date-input {
   > .date-picker {
     position: absolute;
-    transition: opacity 0.4s;
+    top: -90px;
 
     background-color: #ffffff;
     padding: 8px 20px 16px;
     border-radius: 4px;
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08), 0 -2px 4px rgba(0, 0, 0, 0.02);
+    filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.08));
     opacity: 0;
+    z-index: 2;
+    transition: opacity 0.4s;
     pointer-events: none;
     user-select: none;
 
     &.visible {
       opacity: 1;
       pointer-events: auto;
+    }
+
+    &::after {
+      content: "";
+      display: block;
+      position: absolute;
+      border: 8px solid transparent;
+      transform: rotate(-45deg);
+      left: -7px;
+      top: 105px;
+      background-color: #fff;
     }
 
     > header {

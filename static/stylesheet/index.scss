@@ -1,9 +1,4 @@
-// Color Panel
-$default: #d0d0d5;
-$focus: rgba(#2486ff, 0.6);
-
-/* Base Part */
-@import "base";
+@import "color";
 
 /* Form Part */
 @import "form";
@@ -15,4 +10,3 @@ $focus: rgba(#2486ff, 0.6);
 
 /* Page Part */
 @import "page";
-

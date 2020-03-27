@@ -1,56 +1,4 @@
 @charset "UTF-8";
-/* Base Part */
-* {
-  box-sizing: border-box;
-}
-
-html, body {
-  height: 100%;
-  padding: 0;
-  margin: 0;
-}
-
-body {
-  background-color: #fafbfc;
-}
-
-code {
-  color: #cccccc;
-  background-color: #f1f2f3;
-  border-radius: 3px;
-  font-family: sans-serif;
-  font-size: 90%;
-  padding: 2px 4px;
-}
-
-a {
-  color: rgba(36, 134, 255, 0.6);
-  text-decoration: none;
-}
-
-#content {
-  font-size: 14px;
-  color: #999999;
-}
-#content h1 {
-  color: #666666;
-}
-
-#title {
-  width: 400px;
-  height: 400px;
-  margin-inline-end: 80px;
-}
-
-#github {
-  width: 60px;
-  height: 60px;
-  position: fixed;
-  right: 0;
-  top: 0;
-  cursor: pointer;
-}
-
 /* Form Part */
 #form {
   display: inline-block;
@@ -158,18 +106,30 @@ input[type=submit]:hover {
 /* 日期输入控件，可结合输入控件使用 */
 .date-input > .date-picker {
   position: absolute;
-  transition: opacity 0.4s;
+  top: -90px;
   background-color: #ffffff;
   padding: 8px 20px 16px;
   border-radius: 4px;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08), 0 -2px 4px rgba(0, 0, 0, 0.02);
+  filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.08));
   opacity: 0;
+  z-index: 2;
+  transition: opacity 0.4s;
   pointer-events: none;
   user-select: none;
 }
 .date-input > .date-picker.visible {
   opacity: 1;
   pointer-events: auto;
+}
+.date-input > .date-picker::after {
+  content: "";
+  display: block;
+  position: absolute;
+  border: 8px solid transparent;
+  transform: rotate(-45deg);
+  left: -7px;
+  top: 105px;
+  background-color: #fff;
 }
 .date-input > .date-picker > header {
   padding: 1.2em 0;
@@ -248,6 +208,7 @@ input[type=submit]:hover {
 /* Notification Part */
 /* 提醒 */
 .notification {
+  color: #999999;
   border-radius: 10px;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08), 0 -2px 4px rgba(0, 0, 0, 0.02);
   opacity: 0;
@@ -274,7 +235,7 @@ input[type=submit]:hover {
   height: 50px;
 }
 .notification.show-msg {
-  padding: 20px 40px;
+  padding: 30px 40px;
 }
 .notification.show-msg .loader {
   opacity: 0;
@@ -299,8 +260,7 @@ input[type=submit]:hover {
 }
 .notification .msg {
   opacity: 0;
-  color: #e74c3c;
-  font-size: 1.4em;
+  font-size: 1.2em;
   position: absolute;
   display: flex;
   justify-content: center;
@@ -317,7 +277,11 @@ input[type=submit]:hover {
   background-repeat: no-repeat;
   background-position: center;
   position: absolute;
-  bottom: -15px;
+  top: -18px;
+  right: -18px;
+  box-sizing: content-box;
+  border: 2px solid #fff;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
   cursor: pointer;
 }
 
@@ -468,4 +432,4 @@ body {
   transition: all 0.1s ease-in-out;
 }
 
-/*# sourceMappingURL=style.css.map */
+/*# sourceMappingURL=index.css.map */

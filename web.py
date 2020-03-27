@@ -8,12 +8,13 @@ import json
 
 from flask import Flask, render_template, request, send_file
 
-from syllabus import generate_syllabus, StepError, get_cal
+from syllabus import generate_syllabus, StepError, format_cal
 
-data = ''
+# 临时存储数据
+data = []
 
 app = Flask(__name__)
-app.debug = True
+app.debug = False
 
 
 @app.route('/', methods=['GET'])
@@ -27,11 +28,12 @@ def export():
         'USERNAME': request.form['username'],
         'PASSWORD': request.form['password']
     }
+    # 将 2020-2-17 这样的字符串用 - 分割，并使每个元素转化为 int 类型
     start_date = [int(x) for x in request.form['date'].split('-')]
 
     try:
         global data
-        data = generate_syllabus(account, (start_date[1], start_date[2]))
+        data = generate_syllabus(account, start_date)
     except StepError as err:
         return json.dumps({
             'code': -1,
@@ -47,8 +49,13 @@ def export():
 @app.route('/file', methods=['POST'])
 def file():
     global data
-    return send_file(io.BytesIO(get_cal(data[0]).encode('UTF-8')), attachment_filename=f'{data[1]}_syllabus.ics',
+    return send_file(io.BytesIO(format_cal(data[0]).encode('UTF-8')), attachment_filename=f'{data[1]}_syllabus.ics',
                      as_attachment=True)
+
+
+@app.errorhandler(404)
+def error_404(err):
+    return render_template('error.html', title='404', content='File not found'), 404
 
 
 if __name__ == '__main__':
