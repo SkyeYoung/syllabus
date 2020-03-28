@@ -14,9 +14,8 @@ __author__ = 'iskye'
 import functools
 import logging
 import re
-import typing
 from datetime import datetime, timedelta
-from typing import Dict
+from typing import Dict, Union, List, Tuple
 
 from bs4 import BeautifulSoup
 from icalendar import Calendar, Event
@@ -35,6 +34,10 @@ LOGIN_URL = f'{URL}/xk/LoginToXk'
 SYLLABUS_URL = f'{URL}/xskb/xskb_list.do'
 # 上课开始时间
 START_TIME = (8, 0), (10, 0), (14, 0), (15, 50), (19, 0)
+# 课程时长（单位：min）
+DURATION = 100
+# 提前通知时间（单位：min）
+ADVANCE_NOTICE = 20
 
 
 ###############################################################################
@@ -52,11 +55,9 @@ class CourseInfo:
         :param info_list: 包括课程号、课程名、教师、周次、上课地点
         :param day: 周几
         :param time: 开始时间的序号
-        :param start_date: 正式开学的第一天，格式为 (年,月,日)
         """
         # 课程号、课程名、教师、周次文字、上课地点
         self.id, self.name, self.teacher, self.week_range_text, self.classroom = info_list
-
         # 周次列表
         self.week_range = [int(x) for x in re.split('[,-]', info_list[3][:-3])]
         # 周几
@@ -92,11 +93,15 @@ def color_font(content: str, color: str) -> str:
     return f'\033[{color_dict[color]}m{content}\033[0m'
 
 
-def current_term(start_date: typing.Union[tuple, list]):
+def current_term(start_date: Union[tuple, list]) -> str:
+    """将开学日期转化为学期文字
+    :param start_date: (年, 月, 日)
+    :return: 学期，类似 2019-2020-2
+    """
     if 1 < start_date[1] < 4:
-        return f'{start_date[0] - 1}-{start_date[0]}-{start_date[1]}-2'
+        return f'{start_date[0] - 1}-{start_date[0]}-2'
     elif 8 < start_date[1] < 11:
-        return f'{start_date[0]}-{start_date[0] + 1}-{start_date[1]}-1'
+        return f'{start_date[0]}-{start_date[0] + 1}-1'
     else:
         raise StepError('开学日期格式错误')
 
@@ -120,11 +125,11 @@ def step_status(step: str, success: str = '', failed: str = '', *, is_rewrite: b
             try:
                 result = func(*args, **kwargs)
             except StepError:
-                is_main and print(success if is_rewrite else color_font('失败', 'red'))
+                is_main and print(failed if is_rewrite else color_font('失败', 'red'))
                 # 继续抛出错误
                 raise
             else:
-                is_main and print(failed if is_rewrite else color_font('成功', 'green'))
+                is_main and print(success if is_rewrite else color_font('成功', 'green'))
                 # 返回函数执行结果
                 return result
 
@@ -138,26 +143,25 @@ def format_cal(cal: Calendar) -> str:
     return cal.to_ical().decode().replace('\r\n', '\n')
 
 
-def get_cal_event(info: CourseInfo, start_date: typing.Union[tuple, list], *, start_week=0, end_week=1) -> Event:
+def get_cal_event(info: CourseInfo, start_date: Union[tuple, list], *, start_week=0, end_week=1) -> Event:
     """返回一个 cal event
     :param info: 课程信息
     :param start_date: 正式开学的第一天，格式为 (年,月,日)
     :param start_week: 开始星期的序号，0 开始
     :param end_week: 结束星期的序号，0 开始
-    :return: iCalender Event
+    :return: Calender Event
     """
     # 初始化 event
     event = Event()
     # 开始日期
     start_time = datetime(year=start_date[0], month=start_date[1], day=start_date[2], hour=info.time[0],
-                          minute=info.time[1]) \
-                 + timedelta(weeks=info.week_range[start_week] - 1, days=info.week - 1)
+                          minute=info.time[1]) + timedelta(weeks=info.week_range[start_week] - 1, days=info.week - 1)
     # 一天中的开始时间
     event.add('dtstart', start_time)
     # 一天中的结束时间
-    event.add('dtend', start_time + timedelta(minutes=100))
+    event.add('dtend', start_time + timedelta(minutes=DURATION))
     # 提前通知的时间
-    event.add('trigger', start_time - timedelta(minutes=20))
+    event.add('trigger', start_time - timedelta(minutes=ADVANCE_NOTICE))
     # 重复的日期，以及在哪一周结束
     event.add('rrule', {'freq': 'weekly', 'interval': '1', 'byday': info.week_text,
                         'until': start_time + timedelta(
@@ -176,60 +180,66 @@ def get_cal_event(info: CourseInfo, start_date: typing.Union[tuple, list], *, st
 #                               生成及导出步骤                                #
 ###############################################################################
 
-# 之所以这么写是因为 pycharm 不能正确解析 \b
+# 之所以这么写是因为 Pycharm 不能正确解析 \b
 @step_status(f'STEP: 登录系统\t{color_font("连接中...", "blue")}', f'\rSTEP: 登录系统\t{color_font("成功", "green")}',
              f'\rSTEP: 登录系统\t{color_font("失败", "red")}', is_rewrite=True)
-def login(session: Session, account_info: Dict[str, str]):
+def login(session: Session, account_info: Dict[str, str]) -> Session:
     """登录 & 获取 cookie"""
     try:
         res = session.post(url=LOGIN_URL, data=account_info, timeout=10)
     except exceptions.RequestException:
-        print('DDDDDD')
         raise StepError('登录出现意外，请再试一次')
     else:
         login_html = BeautifulSoup(res.text, features='lxml')
         # 查看是否登录成功
         if len(login_html.find_all('font', {'color': 'red'})) > 0:
             raise StepError('用户名、密码错误或不存在')
+        else:
+            return session
 
 
 @step_status('获取课表')
-def get_syllabus(session: Session, start_date: typing.Union[tuple, list]):
-    """获取学期时间 & 课表"""
-    # 获取网页
-    syllabus_html = BeautifulSoup(session.post(url=SYLLABUS_URL,
-                                               data={'xnxq01id': current_term(start_date), 'sfFD': 1}).text,
-                                  features='lxml')
-    # 课表
-    tds = syllabus_html.find(id='kbtable').find_all_next('div', class_='kbcontent')
-    # 存储课表信息
-    class_table = []
-    # 遍历获取课程信息
-    counter = 1  # 计数器
-    for td in tds:
-        # 提取文字
-        class_info = [text for text in td.stripped_strings]
-        # 存储同一时间段内的课程
-        class_list = []
-        # 分别获取课程信息
-        if len(class_info) >= 5:
-            # 同一时间段的第一个课
-            class_list.append(
-                CourseInfo(class_info[0:5], counter % 7, (counter - 1) // 7)
-            )
-            if len(class_info) == 11:
+def get_syllabus(session: Session, start_date: Union[tuple, list]) -> Tuple[List[List[CourseInfo]], Union[tuple, list]]:
+    """获取课表"""
+    try:
+        res = session.post(url=SYLLABUS_URL, data={'xnxq01id': current_term(start_date), 'sfFD': 1})
+    except exceptions.RequestException:
+        raise StepError('获取课表出现意外，请再试一次')
+    else:
+        syllabus_html = BeautifulSoup(res.text, features='lxml')
+        tds = syllabus_html.find(id='kbtable').find_all_next('div', class_='kbcontent')
+        # 存储课表信息
+        class_table = []
+        # 遍历获取课程信息
+        counter = 1  # 计数器
+        for td in tds:
+            # 提取文字
+            class_info = [text for text in td.stripped_strings]
+            # 存储同一时间段内的课程
+            class_list = []
+            # 分别获取课程信息
+            if len(class_info) >= 5:
+                # 同一时间段的第一个课
                 class_list.append(
-                    CourseInfo(class_info[6:11], counter % 7, (counter - 1) // 7)
+                    CourseInfo(class_info[0:5], counter % 7, (counter - 1) // 7)
                 )
-        # 将同一时间段内的课程加入到课表信息中
-        class_table.append(class_list)
-        counter += 1
-    return class_table, start_date
+                if len(class_info) == 11:
+                    class_list.append(
+                        CourseInfo(class_info[6:11], counter % 7, (counter - 1) // 7)
+                    )
+            # 将同一时间段内的课程加入到课表信息中
+            class_table.append(class_list)
+            counter += 1
+        return class_table, start_date
 
 
 @step_status('生成日历')
-def build_calender(class_table, start_date):
-    """生成日历"""
+def build_calender(class_table: List[List[CourseInfo]], start_date: Union[tuple, list]) -> Tuple[Calendar, str]:
+    """生成日历
+    :param class_table:
+    :param start_date: (年,月,日)
+    :return:
+    """
     calender = Calendar()
     # 版本，用于支持一些新特性，比如换行什么的
     calender.add('version', '2.0')
@@ -252,11 +262,11 @@ def build_calender(class_table, start_date):
     return calender, current_term(start_date)
 
 
-def generate_syllabus(account_info: Dict[str, str], start_date: typing.Union[tuple, list]) -> tuple:
+def generate_syllabus(account_info: Dict[str, str], start_date: Union[tuple, list]) -> Tuple[Calendar, str]:
     """生成课表，执行上方三个步骤
-    :param account_info:账户信息
+    :param account_info: 账户信息
     :param start_date: (年,月,日)
-    :return: ical 格式的课表和学期
+    :return: Calender, str
     """
     # 初始化 session
     session = Session()
@@ -267,9 +277,7 @@ def generate_syllabus(account_info: Dict[str, str], start_date: typing.Union[tup
     session.mount('http://', HTTPAdapter(max_retries=2))
     session.mount('https://', HTTPAdapter(max_retries=2))
 
-    login(session, account_info)
-
-    return build_calender(*get_syllabus(session, start_date))
+    return build_calender(*get_syllabus(login(session, account_info), start_date))
 
 
 @step_status('导出文件')
@@ -297,6 +305,8 @@ if __name__ == '__main__':
     try:
         export_ics(*generate_syllabus(account, startDate))
     except Exception as err:
+        # 打印错误
         print('\n' + color_font(f'Error: {err}', 'red'))
+        # 记录错误
         logging.exception(err)
         exit(1)
