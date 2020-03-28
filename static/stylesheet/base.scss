@@ -1,3 +1,5 @@
+@import "color";
+
 * {
   box-sizing: border-box;
 }
@@ -38,6 +40,7 @@ a {
 #title {
   width: 400px;
   height: 400px;
+  margin-inline-end: 60px;
 }
 
 #github {
@@ -47,4 +50,28 @@ a {
   right: 0;
   top: 0;
   cursor: pointer;
+}
+
+.error {
+  font-size: 20px;
+  font-weight: 200;
+
+  position: absolute;
+  left: 50vw;
+  top: 44vh;
+  transform: translate(-50%, -50%);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.dot-divider {
+  display: inline-block;
+  margin-inline-start: 10px;
+  margin-inline-end: 10px;
+  background-color: currentColor;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
 }

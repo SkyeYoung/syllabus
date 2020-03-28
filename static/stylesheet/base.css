@@ -1,0 +1,74 @@
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  padding: 0;
+  margin: 0;
+}
+
+body {
+  background-color: #fafbfc;
+}
+
+code {
+  color: #cccccc;
+  background-color: #f1f2f3;
+  border-radius: 3px;
+  font-family: sans-serif;
+  font-size: 90%;
+  padding: 2px 4px;
+}
+
+a {
+  color: rgba(36, 134, 255, 0.6);
+  text-decoration: none;
+}
+
+#content {
+  font-size: 14px;
+  color: #999999;
+}
+#content h1 {
+  color: #666666;
+}
+
+#title {
+  width: 400px;
+  height: 400px;
+  margin-inline-end: 60px;
+}
+
+#github {
+  width: 60px;
+  height: 60px;
+  position: fixed;
+  right: 0;
+  top: 0;
+  cursor: pointer;
+}
+
+.error {
+  font-size: 20px;
+  font-weight: 200;
+  position: absolute;
+  left: 50vw;
+  top: 44vh;
+  transform: translate(-50%, -50%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.dot-divider {
+  display: inline-block;
+  margin-inline-start: 10px;
+  margin-inline-end: 10px;
+  background-color: currentColor;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+}
+
+/*# sourceMappingURL=base.css.map */

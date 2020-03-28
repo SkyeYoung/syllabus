@@ -1,83 +1,70 @@
-<!doctype html>
-<html lang="zh-CN">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>JUST 课表导出</title>
-    <link rel="shortcut icon" href="/static/favicon.ico">
-    <link rel="stylesheet" href="/static/stylesheet/style.css">
-</head>
-<body>
-<div id="page">
-    <div class="section" data-title="主页">
-        <canvas id="title"></canvas>
-        <form id="form" action="/export" method="post">
-            <fieldset>
-                <div class="input-fill">
-                    <input name="username" id="username" type="text" placeholder="账号" size="12" autocomplete="off"
-                           required/>
-                    <label for="username">账号</label>
-                </div>
-                <div class="input-fill">
-                    <input name="password" id="password" type="password" placeholder="密码" autocomplete="off" required/>
-                    <label for="password">密码</label>
-                </div>
-                <div class="input-fill date-input">
-                    <input name="date" id="date" type="text" placeholder="开学日期" autocomplete="off" required/>
-                    <label for="date">开学日期</label>
-                </div>
-                <input type="submit" value="EXPORT"/>
-            </fieldset>
-        </form>
-    </div>
-    <div class="section" data-title="说明">
-        <div id="content">
-            <h1>食用指南</h1>
-            <p>依次输入教务系统的账号、密码，并选择正式开学的日期（程序依此计算上课日期）。</p>
-            <p>点击 <code>EXPORT</code> 按钮。</p>
-            <p>如果没有意外，ics 文件很快就会被下载到你的电脑中。</p>
-            <h1>几点说明</h1>
-            <p>本工具由 <a href="https://github.com/SkyeYoung" target="_blank">Skye Young</a> 开发，使用 <a
-                    href="https://github.com/JUST-NC/syllabus/blob/master/LICENSE" target="_blank">MIT</a> 协议进行开源。</p>
-            <p>本工具将江苏科技大学的课表导出为 ics 格式，以便导入各类日历应用。</p>
-            <p>本工具产生于本人刚开始学习 Python 的过程中，代码可能非常混乱。</p>
-            <p>本工具为兴趣使然的产物，可能不会修 Bug 。</p>
+{% extends "base.html" %}
+
+{% block title %}主页{% endblock %}
+
+{% block style %}
+    <link rel="stylesheet" href="/static/stylesheet/index.css">
+{% endblock %}
+
+{% block body %}
+    <div id="page">
+        <div class="section" data-title="主页">
+            <canvas id="title"></canvas>
+            <form id="form" action="/export" method="post">
+                <fieldset>
+                    <div class="input-fill">
+                        <input name="username" id="username" type="text" placeholder="账号" size="12" autocomplete="off"
+                               required/>
+                        <label for="username">账号</label>
+                    </div>
+                    <div class="input-fill">
+                        <input name="password" id="password" type="password" placeholder="密码" autocomplete="off"
+                               required/>
+                        <label for="password">密码</label>
+                    </div>
+                    <div class="input-fill date-input">
+                        <input name="date" id="date" type="text" placeholder="开学日期" autocomplete="off" required/>
+                        <label for="date">开学日期</label>
+                    </div>
+                    <input type="submit" value="EXPORT"/>
+                </fieldset>
+            </form>
+        </div>
+        <div class="section" data-title="说明">
+            <div id="content">
+                <h1>食用指南</h1>
+                <p>依次输入教务系统的账号、密码，并选择正式开学的日期（程序依此计算上课日期）。</p>
+                <p>点击 <code>EXPORT</code> 按钮。</p>
+                <p>如果没有意外，ics 文件很快就会被下载到你的电脑中。</p>
+                <h1>几点说明</h1>
+                <p>本工具由 <a href="https://github.com/SkyeYoung" target="_blank">Skye Young</a> 开发，使用 <a
+                        href="https://github.com/JUST-NC/syllabus/blob/master/LICENSE" target="_blank">MIT</a> 协议进行开源。
+                </p>
+                <p>本工具将江苏科技大学的课表导出为 ics 格式，以便导入各类日历应用。</p>
+                <p>本工具产生于本人刚开始学习 Python 的过程中，代码可能非常混乱。</p>
+                <p>本工具为兴趣使然的产物，可能不会修 Bug 。</p>
+            </div>
         </div>
     </div>
-</div>
 
-<nav id="page-nav"></nav>
-
-<div class="notification">
-    <div class="loader">
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
+    <div class="notification">
+        <div class="loader">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+        <div class="msg"></div>
+        <div class="close"></div>
     </div>
-    <div class="msg"></div>
-    <div class="close"></div>
-</div>
 
-<div id="github">
-    <a href="https://github.com/JUST-NC/syllabus" target="_blank">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80">
-            <path d="M39.61 24.44c-8.99 0-16.29 7.29-16.29 16.29 0 7.2 4.67 13.3 11.14 15.46.81.15 1.11-.35 1.11-.79 0-.39-.01-1.41-.02-2.77-4.53.98-5.49-2.18-5.49-2.18-.74-1.88-1.81-2.38-1.81-2.38-1.48-1.01.11-.99.11-.99 1.63.12 2.5 1.68 2.5 1.68 1.45 2.49 3.81 1.77 4.74 1.35.15-1.05.57-1.77 1.03-2.18-3.62-.41-7.42-1.81-7.42-8.05 0-1.78.63-3.23 1.68-4.37-.17-.41-.73-2.07.16-4.31 0 0 1.37-.44 4.48 1.67 1.3-.36 2.69-.54 4.08-.55 1.38.01 2.78.19 4.08.55 3.11-2.11 4.48-1.67 4.48-1.67.89 2.24.33 3.9.16 4.31C49.37 36.65 50 38.1 50 39.88c0 6.26-3.81 7.63-7.44 8.04.58.5 1.11 1.5 1.11 3.02 0 2.18-.02 3.93-.02 4.47 0 .44.29.94 1.12.78 6.47-2.16 11.13-8.26 11.13-15.45 0-9.01-7.3-16.3-16.29-16.3z"
-                  fill-rule="evenodd" clip-rule="evenodd"></path>
-        </svg>
-    </a>
-</div>
+    <!-- leon sans-->
+    <script src="/static/javascript/leon.js"></script>
 
-<!-- leon sans-->
-<script src="/static/javascript/leon.js"></script>
-
-<script src="/static/javascript/page.js"></script>
-<script src="/static/javascript/datepicker.js"></script>
-<script src="/static/javascript/form.js"></script>
-<script src="/static/javascript/config.js"></script>
-</body>
-</html>
+    <script src="/static/javascript/page.js"></script>
+    <script src="/static/javascript/datepicker.js"></script>
+    <script src="/static/javascript/form.js"></script>
+    <script src="/static/javascript/config.js"></script>
+{% endblock %}

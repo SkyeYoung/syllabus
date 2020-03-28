@@ -139,7 +139,7 @@
       
       const input = dateInput.querySelector('input');
       const datePicker = document.querySelector('.date-picker');
-      datePicker.style.left = input.offsetWidth + 6 + 'px';
+      datePicker.style.left = input.offsetWidth + 18 + 'px';
       
       window.addEventListener('click', () => {
         datePicker.classList.remove('visible');

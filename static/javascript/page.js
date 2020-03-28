@@ -4,12 +4,14 @@
   const page = document.querySelector("#page");
   const sections = page.querySelectorAll(".section");
   const pageCount = sections.length;
-  const nav = document.querySelector("#page-nav");
   
   /**
-   * 将页面指示器加入 nav 中
-   * @type {string}
+   * 添加页面指示器
+   * @type {HTMLDivElement}
    */
+  const nav = document.createElement("div");
+  nav.id = "page-nav";
+  
   let html = '<ul>';
   
   for (let i = 0; i < pageCount; i++) {
@@ -19,7 +21,9 @@
   
   html += '</ul>';
   
-  nav.innerHTML += html;
+  nav.innerHTML = html;
+  document.querySelector("body").appendChild(nav);
+  // 获取页面指示器元素列表
   const navEle = nav.querySelectorAll("li");
   
   /**
