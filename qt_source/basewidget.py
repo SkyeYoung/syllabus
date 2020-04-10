@@ -10,11 +10,16 @@ from ctypes import windll
 from PyQt5 import QtGui
 from PyQt5.QtCore import Qt, QSize
 from PyQt5.QtGui import QIcon, QPixmap, QPainter
-from PyQt5.QtWidgets import QWidget, QPushButton, QHBoxLayout, QApplication, QMainWindow, QVBoxLayout, QDesktopWidget
+from PyQt5.QtWidgets import QWidget, QPushButton, QHBoxLayout, QApplication, QMainWindow, QVBoxLayout, QDesktopWidget, \
+    QStackedLayout
 
 from qt_source.tools import *
 
-BAR_HEIGHT = 24  # 标题高度
+###############################################################################
+#                               BaseWindow 部分                               #
+###############################################################################
+
+BAR_HEIGHT = 21  # 标题高度
 BTN_WIDTH = 24  # 按钮宽度
 BTN_HEIGHT = 21  # 按钮高度
 LABEL_SIZE = 24  # 标签尺寸
@@ -47,7 +52,7 @@ class RawTitleBar(QWidget):
 
         """设置样式"""
         self.setAttribute(Qt.WA_StyledBackground, True)  # 设置这个才能设置 QWidget 的背景色
-        self.setStyleSheet(load_qss(abs_path('/style/rawtitlebar.qss')))
+        self.setStyleSheet(load_qss('/style/raw_title_bar.qss'))
 
         """三大按钮"""
         # 初始化三大按钮
@@ -264,12 +269,12 @@ class RawWindow(QMainWindow):
         self.move((screen.width() - window.width()) / 2, (screen.height() - window.height()) / 2)
 
     def paintEvent(self, event: QtGui.QPaintEvent) -> None:
-        """调用 draw_shadow 绘制阴影"""
+        """重写，调用 draw_shadow 绘制阴影"""
         painter = QPainter(self)
         self.__draw_shadow(painter)
 
 
-class BaseWindow(QMainWindow):
+class BaseWindow(QWidget):
     """基础窗体
     样式参考了 Telegram 的桌面版。
     """
@@ -281,18 +286,31 @@ class BaseWindow(QMainWindow):
 
         """设置样式"""
         self.setAttribute(Qt.WA_StyledBackground, True)  # 设置这个才能设置 QWidget 的背景色
-        self.setStyleSheet(load_qss(abs_path('/style/basewindow.qss')))
+        super().setStyleSheet(load_qss('/style/base_window.qss'))
 
     def move_center(self) -> None:
         """窗口居中"""
         self.__window.move_center()
 
+    def setStyleSheet(self, style_sheet: str) -> None:
+        """默认带有白色背景"""
+        super().setStyleSheet(load_qss('/style/base_window.qss') + style_sheet)
+
     def resize(self, *args) -> None:
-        self.__window.resize(*args)
+        if len(args) == 2:
+            width, height = args
+            self.__window.resize(width + 2 * SHADOW_SIZE, height + 2 * SHADOW_SIZE)
+        elif len(args) == 1:
+            self.__window.resize(args[0].height() + 2 * SHADOW_SIZE, args[0].width() + 2 * SHADOW_SIZE)
 
     def setFixedSize(self, *args) -> None:
-        self.__window.setFixedSize(*args)
-        # 因为要阻止全屏，所以要设置下面这句，不然会出错
+        if len(args) == 2:
+            width, height = args
+            self.__window.setFixedSize(width + 2 * SHADOW_SIZE, height + 2 * SHADOW_SIZE)
+        elif len(args) == 1:
+            self.__window.setFixedSize(args[0].height() + 2 * SHADOW_SIZE, args[0].width() + 2 * SHADOW_SIZE)
+
+        # 因为要阻止全屏，所以要设置下面这句，不然会造成一些错误
         self.setWindowFlags(Qt.WindowMinimizeButtonHint | Qt.WindowCloseButtonHint)
 
     def show(self) -> None:
@@ -309,6 +327,45 @@ class BaseWindow(QMainWindow):
 
     def setWindowFlags(self, type_: typing.Union[Qt.WindowFlags, Qt.WindowType]) -> None:
         self.__window.set_window_flags(type_)
+
+    def close(self) -> bool:
+        return self.__window.close()
+
+
+###############################################################################
+#                               BaseButton 部分                               #
+###############################################################################
+
+class BaseButton(QPushButton):
+    def __init__(self, *args):
+        super(BaseButton, self).__init__(*args)
+        self.setStyleSheet(load_qss('/style/base_button.qss'))
+        self.setFixedSize(297, 57)
+        self.setCursor(Qt.PointingHandCursor)
+
+
+###############################################################################
+#                             BackButton 部分                             #
+###############################################################################
+
+class BackButton(QPushButton):
+    def __init__(self, *args, stack_layout):
+        super(BackButton, self).__init__(*args)
+        self.stack_layout: QStackedLayout = stack_layout
+
+        """设置样式"""
+        self.setIcon(QIcon(abs_path('/images/icon/left_arrow.png')))
+        self.setStyleSheet(load_qss('/style/back_button.qss'))
+        self.setIconSize(QSize(20, 20))
+        self.setFixedSize(40, 40)
+        self.setCursor(Qt.PointingHandCursor)
+
+        """设置点击事件"""
+        self.clicked.connect(self.back_last_interface)
+
+    def back_last_interface(self):
+        prev = self.stack_layout.currentIndex() - 1
+        self.stack_layout.setCurrentIndex(prev if prev >= 0 else 0)
 
 
 if __name__ == '__main__':
@@ -327,5 +384,12 @@ if __name__ == '__main__':
     # base_window.setFixedSize(640, 400)
     base_window.setWindowIcon(QIcon('./images/icon/logo.png'))
     base_window.setWindowTitle('Just A Test')
+
+    vBoxLayout = QVBoxLayout()
+    btn = BaseButton('&q')
+    btn.setText('TEST')
+    vBoxLayout.addWidget(btn)
+
+    base_window.setLayout(vBoxLayout)
     base_window.show()
     sys.exit(app.exec_())

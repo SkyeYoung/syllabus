@@ -1,0 +1,15 @@
+QLabel {
+    font-family: "Microsoft YaHei UI", sans-serif;
+    text-align: center;
+}
+
+QLabel#title {
+    font-size: 22px;
+    font-weight: 800;
+    color: #333333;
+}
+
+QLabel#content {
+    font-size: 14px;
+    color: #919191;
+}

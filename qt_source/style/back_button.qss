@@ -1,0 +1,7 @@
+BackButton {
+    border-radius: 20px;
+}
+
+BackButton:hover {
+    background-color: #f1f1f1;
+}

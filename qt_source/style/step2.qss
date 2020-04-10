@@ -1,0 +1,22 @@
+QLabel {
+    font-family: "Microsoft YaHei UI", sans-serif;
+}
+
+QLabel#title {
+    font-size: 18px;
+    color: #333333;
+}
+
+QLabel#content {
+    font-size: 12px;
+    color: #919191;
+}
+
+QLabel#err-msg {
+    font-size: 14px;
+    color: #000000;
+}
+
+QLabel#success-msg {
+    font-size: 28px;
+}

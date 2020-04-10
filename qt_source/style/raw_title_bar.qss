@@ -1,13 +1,13 @@
-QWidget{
+RawTitleBar {
     background-color: #f1f1f1;
     height: 24px;
 }
 
-QPushButton{
+QPushButton {
     border: none;
     background-color: transparent;
 }
 
-QPushButton:hover{
+QPushButton:hover {
     background: #e5e5e5;
 }

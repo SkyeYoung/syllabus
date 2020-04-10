@@ -1,0 +1,8 @@
+BaseButton {
+    font-family: "Microsoft YaHei UI", sans-serif;
+    color: #CDD6DC;
+    background-color: #324E63;
+    border-radius: 4px;
+    font-size: 16px;
+    font-weight: bold;
+}
