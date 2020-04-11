@@ -71,6 +71,13 @@ class CourseInfo:
                f'周次：{self.week_range_text}，上课地点：{self.classroom}'
 
 
+def account(username: str, password: str):
+    return {
+        'USERNAME': username,
+        'PASSWORD': password
+    }
+
+
 ###############################################################################
 #                               工具类以及函数                                #
 ###############################################################################
@@ -291,19 +298,17 @@ def export_ics(calender: Calendar, term: str) -> None:
 
 
 if __name__ == '__main__':
-    """单独使用本脚本时，需要在此处填入账号和正式开学日期"""
+    """单文件模式"""
 
     # 账户信息
-    account = {
-        'USERNAME': '',
-        'PASSWORD': ''
-    }
+    """单独使用本脚本时，需要在此处填入账号和正式开学日期！！！"""
+    self_account = account('', '')
     # 正式开学日期
     startDate = (2020, 2, 17)
 
     # 生成课表并导出
     try:
-        export_ics(*generate_syllabus(account, startDate))
+        export_ics(*generate_syllabus(self_account, startDate))
     except Exception as err:
         # 打印错误
         print('\n' + color_font(f'Error: {err}', 'red'))

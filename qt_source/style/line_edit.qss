@@ -1,0 +1,80 @@
+LineEditLabel {
+    font-family: "Microsoft YaHei UI", sans-serif;
+    font-size: 14px;
+}
+
+LineEdit, DateEdit {
+    font-family: "Microsoft YaHei UI", sans-serif;
+    color: #333333;
+    font-size: 20px;
+    font-weight: 200;
+    border: none;
+    border-bottom: 1px solid #cccccc;
+}
+
+LineEdit:focus, DateEdit:focus {
+    border-bottom: 1px solid #919191;
+}
+
+DateEdit::drop-down {
+    width: 80%;
+    margin: 0 10% 2px;
+    border-radius: 5px;
+    background-color: #f1f1f1;
+}
+
+DateEdit::down-arrow {
+    width: 20px;
+    height: 20px;
+}
+
+DateEdit::drop-down:hover, DateEdit::drop-down:pressed, DateEdit::drop-down:focus {
+    background-color: #dfdfdf;
+}
+
+QCalendarWidget QToolButton {
+    height: 20px;
+    width: 48px;
+    font-size: 12px;
+}
+
+QCalendarWidget QWidget#qt_calendar_navigationbar, QCalendarWidget QTableView {
+    font-family: "Microsoft YaHei UI", sans-serif;
+    alternate-background-color: #ffffff;
+    border-width: 0;
+}
+
+QCalendarWidget QMenu {
+    width: 100px;
+    left: 20px;
+    color: #666666;
+    font-size: 14px;
+    background-color: #fdfdfd;
+}
+
+QCalendarWidget QToolButton#qt_calendar_monthbutton {
+    padding-right: 20px;
+    color: #666666;
+}
+
+QCalendarWidget QToolButton#qt_calendar_monthbutton::menu-indicator {
+    subcontrol-origin: padding;
+    subcontrol-position: center right;
+    right: 3px;
+    width: 10px;
+}
+
+QCalendarWidget QToolButton#qt_calendar_yearbutton {
+    color: #666666;
+}
+
+QCalendarWidget QTableView {
+    padding: 0 6px 6px;
+}
+
+QCalendarWidget QAbstractItemView {
+    selection-color: #ffffff;
+    selection-background-color: #7cb6ff;
+    font-size: 14px;
+    outline: 0;
+}

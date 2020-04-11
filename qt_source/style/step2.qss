@@ -17,6 +17,7 @@ QLabel#err-msg {
     color: #000000;
 }
 
-QLabel#success-msg {
-    font-size: 28px;
+QLabel#suc-msg {
+    font-size: 18px;
+    color: #000000;
 }

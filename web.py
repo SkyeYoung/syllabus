@@ -8,7 +8,7 @@ import json
 
 from flask import Flask, render_template, request, send_file
 
-from syllabus import generate_syllabus, StepError, format_cal
+from syllabus import generate_syllabus, StepError, format_cal, account
 
 # 临时存储数据
 data = []
@@ -24,16 +24,14 @@ def home():
 
 @app.route('/export', methods=['POST'])
 def export():
-    account = {
-        'USERNAME': request.form['username'],
-        'PASSWORD': request.form['password']
-    }
+    # 账户信息
+    self_account = account(request.form['username'], request.form['password'])
     # 将 2020-2-17 这样的字符串用 - 分割，并使每个元素转化为 int 类型
     start_date = [int(x) for x in request.form['date'].split('-')]
 
     try:
         global data
-        data = generate_syllabus(account, start_date)
+        data = generate_syllabus(self_account, start_date)
     except StepError as err:
         return json.dumps({
             'code': -1,
