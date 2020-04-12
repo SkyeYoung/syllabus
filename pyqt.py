@@ -6,14 +6,13 @@ __author__ = 'iskye'
 import sys
 from ctypes import windll
 
-from PyQt5.QtCore import QSize, QDate
+from PyQt5.QtCore import QDate, QSize
 from PyQt5.QtGui import QIcon, QPixmap
-from PyQt5.QtWidgets import QApplication, QLabel, QStackedLayout, QWidget, QFormLayout, QLineEdit
+from PyQt5.QtWidgets import QFormLayout, QStackedLayout, QLabel, QWidget, QLineEdit, QApplication
 
-from qt_source.basewidget import BaseWindow, BaseButton, BackButton, SHADOW_SIZE, BAR_HEIGHT, LineEdit, EditLabel, \
-    DateEdit
+from qt_source.basewidget import *
 from qt_source.tools import load_qss
-from syllabus import account
+from syllabus import *
 
 # 全局变量
 WINDOW_WIDTH = 784  # 窗口宽度
@@ -36,7 +35,8 @@ class Window(BaseWindow):
         self.stack_layout.addWidget(self.step_1)
         self.stack_layout.addWidget(self.step_2)
         self.stack_layout.addWidget(self.step_3)
-
+        self.stack_layout.addWidget(self.step_suc)
+        self.stack_layout.addWidget(self.step_err)
         self.stack_layout.setCurrentIndex(0)
         self.show()
 
@@ -214,7 +214,8 @@ class Window(BaseWindow):
 
         return interface
 
-    def step_err(self, msg):
+    @property
+    def step_err(self):
         """失败页面"""
         interface = QWidget()
         interface.setStyleSheet(load_qss('/style/step2.qss'))
@@ -240,12 +241,7 @@ class Window(BaseWindow):
         content2.adjustSize()
         content2.move(244, 134)
 
-        err_msg = QLabel(interface)
-        err_msg.setText(msg)
-        err_msg.setObjectName('err-msg')
-        err_msg.adjustSize()
-        err_msg.move((WINDOW_WIDTH - err_msg.width()) / 2,
-                     (WINDOW_HEIGHT - err_msg.height() - SHADOW_SIZE - BAR_HEIGHT) / 2)
+        self.err_msg_label = QLabel(interface)
 
         btn = BaseButton(interface)
         btn.setText('再试一次')
@@ -261,16 +257,23 @@ class Window(BaseWindow):
         self.stack_layout.setCurrentIndex(2)
 
     def step_3_action(self, date):
-        # try:
-        #     export_ics(*generate_syllabus(self_account, (date.year(), date.month(), date.day())))
-        # except StepError as err_msg:
-        #     # 切换到第五个界面，即失败界面
-        #     self.stack_layout.addWidget(self.step_err(err_msg))
-        #     self.stack_layout.setCurrentIndex(self.stack_layout.currentIndex() + 1)
-        # else:
-        # 切换到第四个界面，即成功界面
-        self.stack_layout.addWidget(self.step_suc)
-        self.stack_layout.setCurrentIndex(self.stack_layout.currentIndex() + 1)
+        try:
+            export_ics(*generate_syllabus(self_account, (date.year(), date.month(), date.day())))
+        except StepError as err_msg:
+            # 切换到第五个界面，即失败界面
+            self.set_err_msg(self.err_msg_label, err_msg)
+            self.stack_layout.setCurrentIndex(4)
+        else:
+            # 切换到第四个界面，即成功界面
+            self.stack_layout.setCurrentIndex(3)
+
+    @staticmethod
+    def set_err_msg(err_msg_label: QLabel, err_msg: StepError):
+        err_msg_label.setText(str(err_msg))
+        err_msg_label.setObjectName('err-msg')
+        err_msg_label.adjustSize()
+        err_msg_label.move((WINDOW_WIDTH - err_msg_label.width()) / 2,
+                           (WINDOW_HEIGHT - err_msg_label.height() - SHADOW_SIZE - BAR_HEIGHT) / 2)
 
     def exit(self):
         self.close()

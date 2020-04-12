@@ -2,6 +2,8 @@
 # -*- coding: utf-8 -*-
 
 __author__ = 'iskye'
+__all__ = ['BaseWindow', 'BaseButton', 'BackButton', 'LineEdit', 'DateEdit', 'EditLabel', 'BAR_HEIGHT', 'BTN_WIDTH',
+           'BTN_HEIGHT', 'LABEL_SIZE', 'SHADOW_SIZE']
 
 import sys
 import typing
@@ -354,12 +356,12 @@ class BackButton(QPushButton):
         self.stack_layout: QStackedLayout = stack_layout
 
         """设置样式"""
-        SIZE = 26
+        size = 26
         icon = QPixmap(abs_path('/images/icon/left_arrow.png')). \
-            scaled(SIZE, SIZE, Qt.KeepAspectRatio, Qt.SmoothTransformation)
+            scaled(size, size, Qt.KeepAspectRatio, Qt.SmoothTransformation)
         self.setIcon(QIcon(icon))
         self.setStyleSheet(load_qss('/style/back_button.qss'))
-        self.setIconSize(QSize(SIZE, SIZE))
+        self.setIconSize(QSize(size, size))
         self.setFixedSize(40, 40)
         self.setCursor(Qt.PointingHandCursor)
 
