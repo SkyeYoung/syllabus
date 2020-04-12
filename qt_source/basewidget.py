@@ -378,15 +378,16 @@ class BackButton(QPushButton):
 class LineEdit(QLineEdit):
     def __init__(self, *args):
         super(LineEdit, self).__init__(*args)
-        self.setStyleSheet(load_qss('/style/line_edit.qss'))
+        self.setStyleSheet(load_qss('/style/label_edit.qss'))
 
 
 class DateEdit(QDateEdit):
     def __init__(self, *args):
         super(DateEdit, self).__init__(*args)
 
-        self.setStyleSheet(load_qss('/style/line_edit.qss') +
-                           'DateEdit::down-arrow {border-image:url(' + abs_path('/images/icon/down.png') + ');}' +
+        self.setStyleSheet(load_qss('/style/label_edit.qss') +
+                           'DateEdit::down-arrow {border-image:url(' +
+                           abs_path('/images/icon/down.png') + ');}' +
                            'QToolButton#qt_calendar_prevmonth{ qproperty-icon: url(' +
                            abs_path('/images/icon/left.png') + '); }' +
                            'QToolButton#qt_calendar_nextmonth{ qproperty-icon: url(' +
@@ -401,7 +402,7 @@ class DateEdit(QDateEdit):
 class EditLabel(QLabel):
     def __init__(self, *args):
         super(EditLabel, self).__init__(*args)
-        self.setStyleSheet(load_qss('/style/line_edit.qss'))
+        self.setStyleSheet(load_qss('/style/label_edit.qss'))
 
 
 if __name__ == '__main__':

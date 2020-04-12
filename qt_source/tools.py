@@ -8,7 +8,7 @@ import os
 
 def load_qss(file_road):
     """导入 .qss 文件，不要带“.”之类的符号"""
-    with open(abs_path(file_road)) as f:
+    with open(abs_path(file_road), encoding='utf-8') as f:
         return str(f.read())
 
 

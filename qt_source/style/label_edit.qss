@@ -1,8 +1,10 @@
+/* 标签 */
 LineEditLabel {
     font-family: "Microsoft YaHei UI", sans-serif;
     font-size: 14px;
 }
 
+/* 输入框和日期输入框 */
 LineEdit, DateEdit {
     font-family: "Microsoft YaHei UI", sans-serif;
     color: #333333;
@@ -12,10 +14,12 @@ LineEdit, DateEdit {
     border-bottom: 1px solid #cccccc;
 }
 
+/* 输入框和日期输入框的聚焦状态 */
 LineEdit:focus, DateEdit:focus {
     border-bottom: 1px solid #919191;
 }
 
+/* 日期输入框的下拉按钮 */
 DateEdit::drop-down {
     width: 80%;
     margin: 0 10% 2px;
@@ -23,27 +27,32 @@ DateEdit::drop-down {
     background-color: #f1f1f1;
 }
 
+/* 日期输入框的下拉按钮中的下拉箭头 */
 DateEdit::down-arrow {
     width: 20px;
     height: 20px;
 }
 
-DateEdit::drop-down:hover, DateEdit::drop-down:pressed, DateEdit::drop-down:focus {
+/* 日期输入框的下拉按钮中的下拉箭头的鼠标悬浮和按下状态 */
+DateEdit::drop-down:hover, DateEdit::drop-down:pressed {
     background-color: #dfdfdf;
 }
 
+/* 日历控件的工具栏 */
+QCalendarWidget QWidget#qt_calendar_navigationbar {
+    font-family: "Microsoft YaHei UI", sans-serif;
+    alternate-background-color: #fdfdfd;
+    border-width: 0;
+}
+
+/* 日历控件工具栏的按钮 */
 QCalendarWidget QToolButton {
     height: 20px;
     width: 48px;
     font-size: 12px;
 }
 
-QCalendarWidget QWidget#qt_calendar_navigationbar, QCalendarWidget QTableView {
-    font-family: "Microsoft YaHei UI", sans-serif;
-    alternate-background-color: #ffffff;
-    border-width: 0;
-}
-
+/* 月份选择框 */
 QCalendarWidget QMenu {
     width: 100px;
     left: 20px;
@@ -52,11 +61,13 @@ QCalendarWidget QMenu {
     background-color: #fdfdfd;
 }
 
+/* 月份按钮 */
 QCalendarWidget QToolButton#qt_calendar_monthbutton {
     padding-right: 20px;
     color: #666666;
 }
 
+/* 月份按钮右侧的向下箭头 */
 QCalendarWidget QToolButton#qt_calendar_monthbutton::menu-indicator {
     subcontrol-origin: padding;
     subcontrol-position: center right;
@@ -64,17 +75,29 @@ QCalendarWidget QToolButton#qt_calendar_monthbutton::menu-indicator {
     width: 10px;
 }
 
+/* 年份按钮 */
 QCalendarWidget QToolButton#qt_calendar_yearbutton {
     color: #666666;
 }
 
+/* 日历日期主体部分（白色部分） */
 QCalendarWidget QTableView {
+    font-family: "Microsoft YaHei UI", sans-serif;
+    border-width: 0;
     padding: 0 6px 6px;
+    /* 周一周二那一串 */
+    alternate-background-color: #ffffff;
 }
 
+/* 每一个日期 */
 QCalendarWidget QAbstractItemView {
     selection-color: #ffffff;
     selection-background-color: #7cb6ff;
     font-size: 14px;
     outline: 0;
+}
+
+/* 当前月中的日期 */
+QCalendarWidget QAbstractItemView:enabled {
+    color: #444444;
 }
