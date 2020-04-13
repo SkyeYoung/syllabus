@@ -2,6 +2,8 @@
 # -*- coding: utf-8 -*-
 
 __author__ = 'iskye'
+__all__ = ['BaseWindow', 'BaseButton', 'BackButton', 'LineEdit', 'DateEdit', 'EditLabel', 'BAR_HEIGHT', 'BTN_WIDTH',
+           'BTN_HEIGHT', 'LABEL_SIZE', 'SHADOW_SIZE']
 
 import sys
 import typing
@@ -354,21 +356,24 @@ class BackButton(QPushButton):
         self.stack_layout: QStackedLayout = stack_layout
 
         """设置样式"""
-        SIZE = 26
+        size = 26
         icon = QPixmap(abs_path('/images/icon/left_arrow.png')). \
-            scaled(SIZE, SIZE, Qt.KeepAspectRatio, Qt.SmoothTransformation)
+            scaled(size, size, Qt.KeepAspectRatio, Qt.SmoothTransformation)
         self.setIcon(QIcon(icon))
         self.setStyleSheet(load_qss('/style/back_button.qss'))
-        self.setIconSize(QSize(SIZE, SIZE))
+        self.setIconSize(QSize(size, size))
         self.setFixedSize(40, 40)
         self.setCursor(Qt.PointingHandCursor)
 
         """设置点击事件"""
-        self.clicked.connect(self.back_last_interface)
+        self.clicked.connect(self.set_interface)
 
-    def back_last_interface(self):
-        prev = self.stack_layout.currentIndex() - 1
-        self.stack_layout.setCurrentIndex(prev if prev >= 0 else 0)
+    def set_interface(self, index=-1):
+        if index <= -1:
+            prev = self.stack_layout.currentIndex() - 1
+            self.stack_layout.setCurrentIndex(prev if prev >= 0 else 0)
+        else:
+            self.stack_layout.setCurrentIndex(index)
 
 
 ###############################################################################
@@ -378,15 +383,16 @@ class BackButton(QPushButton):
 class LineEdit(QLineEdit):
     def __init__(self, *args):
         super(LineEdit, self).__init__(*args)
-        self.setStyleSheet(load_qss('/style/line_edit.qss'))
+        self.setStyleSheet(load_qss('/style/label_edit.qss'))
 
 
 class DateEdit(QDateEdit):
     def __init__(self, *args):
         super(DateEdit, self).__init__(*args)
 
-        self.setStyleSheet(load_qss('/style/line_edit.qss') +
-                           'DateEdit::down-arrow {border-image:url(' + abs_path('/images/icon/down.png') + ');}' +
+        self.setStyleSheet(load_qss('/style/label_edit.qss') +
+                           'DateEdit::down-arrow {border-image:url(' +
+                           abs_path('/images/icon/down.png') + ');}' +
                            'QToolButton#qt_calendar_prevmonth{ qproperty-icon: url(' +
                            abs_path('/images/icon/left.png') + '); }' +
                            'QToolButton#qt_calendar_nextmonth{ qproperty-icon: url(' +
@@ -401,7 +407,7 @@ class DateEdit(QDateEdit):
 class EditLabel(QLabel):
     def __init__(self, *args):
         super(EditLabel, self).__init__(*args)
-        self.setStyleSheet(load_qss('/style/line_edit.qss'))
+        self.setStyleSheet(load_qss('/style/label_edit.qss'))
 
 
 if __name__ == '__main__':

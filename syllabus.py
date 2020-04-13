@@ -71,7 +71,7 @@ class CourseInfo:
                f'周次：{self.week_range_text}，上课地点：{self.classroom}'
 
 
-def account(username: str, password: str):
+def account(username: str, password: str) -> dict:
     return {
         'USERNAME': username,
         'PASSWORD': password
