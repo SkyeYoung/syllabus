@@ -21,8 +21,8 @@ LineEdit:focus, DateEdit:focus {
 
 /* 日期输入框的下拉按钮 */
 DateEdit::drop-down {
-    width: 80%;
-    margin: 0 10% 2px;
+    width: 90%;
+    margin: 0 5% 2px 5%;
     border-radius: 5px;
     background-color: #f1f1f1;
 }

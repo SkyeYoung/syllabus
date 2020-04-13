@@ -366,11 +366,14 @@ class BackButton(QPushButton):
         self.setCursor(Qt.PointingHandCursor)
 
         """设置点击事件"""
-        self.clicked.connect(self.back_last_interface)
+        self.clicked.connect(self.set_interface)
 
-    def back_last_interface(self):
-        prev = self.stack_layout.currentIndex() - 1
-        self.stack_layout.setCurrentIndex(prev if prev >= 0 else 0)
+    def set_interface(self, index=-1):
+        if index <= -1:
+            prev = self.stack_layout.currentIndex() - 1
+            self.stack_layout.setCurrentIndex(prev if prev >= 0 else 0)
+        else:
+            self.stack_layout.setCurrentIndex(index)
 
 
 ###############################################################################
