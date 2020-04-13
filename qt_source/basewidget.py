@@ -5,7 +5,6 @@ __author__ = 'iskye'
 __all__ = ['BaseWindow', 'BaseButton', 'BackButton', 'LineEdit', 'DateEdit', 'EditLabel', 'BAR_HEIGHT', 'BTN_WIDTH',
            'BTN_HEIGHT', 'LABEL_SIZE', 'SHADOW_SIZE']
 
-import sys
 import typing
 from ctypes import windll
 
@@ -54,7 +53,7 @@ class RawTitleBar(QWidget):
 
         """设置样式"""
         self.setAttribute(Qt.WA_StyledBackground, True)  # 设置这个才能设置 QWidget 的背景色
-        self.setStyleSheet(load_qss('/style/raw_title_bar.qss'))
+        self.setStyleSheet(load_qss('static/style/raw_title_bar.qss'))
 
         """三大按钮"""
         # 初始化三大按钮
@@ -68,16 +67,16 @@ class RawTitleBar(QWidget):
         self.__close_btn.setFixedSize(BTN_WIDTH, BTN_HEIGHT)
 
         # 设置两大按钮图标
-        self.__min_btn.setIcon(QIcon(abs_path('/images/icon/minimize.png')))
-        self.__max_btn.setIcon(QIcon(abs_path('/images/icon/maximize.png')))
+        self.__min_btn.setIcon(QIcon(abs_path('static/images/icon/minimize.png')))
+        self.__max_btn.setIcon(QIcon(abs_path('static/images/icon/maximize.png')))
 
         # 关闭按钮额外设置
         self.__close_btn.setStyleSheet(
-            'QPushButton{border-image:url(' + abs_path('/images/icon/close.png') + ');}' +  # 按钮正常状态
+            'QPushButton{border-image:url(' + abs_path('static/images/icon/close.png') + ');}' +  # 按钮正常状态
             'QPushButton:hover{background: #e81123;' +
-            'border-image:url(' + abs_path('/images/icon/close-hover.png') + ');}' +  # 鼠标悬浮状态
+            'border-image:url(' + abs_path('static/images/icon/close-hover.png') + ');}' +  # 鼠标悬浮状态
             'QPushButton:disabled{' +
-            f'border-image:url(' + abs_path('/images/icon/close-disable.png') + ');}')  # 按钮禁用状态
+            f'border-image:url(' + abs_path('static/images/icon/close-disable.png') + ');}')  # 按钮禁用状态
 
         # 设置三大按钮图标大小
         self.__min_btn.setIconSize(QSize(24, 21))
@@ -112,12 +111,12 @@ class RawTitleBar(QWidget):
         if self.__win.isMaximized():
             self.__win.showNormal()
             # 调整为全屏图标
-            self.__max_btn.setIcon(QIcon(abs_path('/images/icon/maximize.png')))
+            self.__max_btn.setIcon(QIcon(abs_path('static/images/icon/maximize.png')))
             self.__win_layout.setContentsMargins(SHADOW_SIZE, SHADOW_SIZE, SHADOW_SIZE, SHADOW_SIZE)
         else:
             self.__win.showMaximized()
             # 调整为重置图标
-            self.__max_btn.setIcon(QIcon(abs_path('/images/icon/restore.png')))
+            self.__max_btn.setIcon(QIcon(abs_path('static/images/icon/restore.png')))
             self.__win_layout.setContentsMargins(0, 0, 0, 0)
 
     def __close_window(self) -> None:
@@ -174,7 +173,7 @@ class RawWindow(QMainWindow):
         super(RawWindow, self).__init__()
 
         # 垂直布局
-        layout = QVBoxLayout(self)
+        layout = QVBoxLayout()
         # 将本身转化为 QWidget
         q_self = QWidget(self)
         # 标题栏
@@ -201,14 +200,14 @@ class RawWindow(QMainWindow):
         ※ 参考 https://www.jianshu.com/p/add4d4778bd3
         """
         pixmaps = list()
-        pixmaps.append(abs_path('/images/shadow/left_top.png'))
-        pixmaps.append(abs_path('/images/shadow/left_bottom.png'))
-        pixmaps.append(abs_path('/images/shadow/right_top.png'))
-        pixmaps.append(abs_path('/images/shadow/right_bottom.png'))
-        pixmaps.append(abs_path('/images/shadow/top_mid.png'))
-        pixmaps.append(abs_path('/images/shadow/bottom_mid.png'))
-        pixmaps.append(abs_path('/images/shadow/left_mid.png'))
-        pixmaps.append(abs_path('/images/shadow/right_mid.png'))
+        pixmaps.append(abs_path('static/images/shadow/left_top.png'))
+        pixmaps.append(abs_path('static/images/shadow/left_bottom.png'))
+        pixmaps.append(abs_path('static/images/shadow/right_top.png'))
+        pixmaps.append(abs_path('static/images/shadow/right_bottom.png'))
+        pixmaps.append(abs_path('static/images/shadow/top_mid.png'))
+        pixmaps.append(abs_path('static/images/shadow/bottom_mid.png'))
+        pixmaps.append(abs_path('static/images/shadow/left_mid.png'))
+        pixmaps.append(abs_path('static/images/shadow/right_mid.png'))
 
         # 左上角
         painter.drawPixmap(0, 0, SHADOW_SIZE, SHADOW_SIZE, QPixmap(pixmaps[0]))
@@ -288,7 +287,7 @@ class BaseWindow(QWidget):
 
         """设置样式"""
         self.setAttribute(Qt.WA_StyledBackground, True)  # 设置这个才能设置 QWidget 的背景色
-        super().setStyleSheet(load_qss('/style/base_window.qss'))
+        super().setStyleSheet(load_qss('static/style/base_window.qss'))
 
     def move_center(self) -> None:
         """窗口居中"""
@@ -296,7 +295,7 @@ class BaseWindow(QWidget):
 
     def setStyleSheet(self, style_sheet: str) -> None:
         """默认带有白色背景"""
-        super().setStyleSheet(load_qss('/style/base_window.qss') + style_sheet)
+        super().setStyleSheet(load_qss('static/style/base_window.qss') + style_sheet)
 
     def resize(self, *args) -> None:
         if len(args) == 2:
@@ -341,7 +340,7 @@ class BaseWindow(QWidget):
 class BaseButton(QPushButton):
     def __init__(self, *args):
         super(BaseButton, self).__init__(*args)
-        self.setStyleSheet(load_qss('/style/base_button.qss'))
+        self.setStyleSheet(load_qss('static/style/base_button.qss'))
         self.setFixedSize(297, 57)
         self.setCursor(Qt.PointingHandCursor)
 
@@ -357,10 +356,10 @@ class BackButton(QPushButton):
 
         """设置样式"""
         size = 26
-        icon = QPixmap(abs_path('/images/icon/left_arrow.png')). \
+        icon = QPixmap(abs_path('static/images/icon/left_arrow.png')). \
             scaled(size, size, Qt.KeepAspectRatio, Qt.SmoothTransformation)
         self.setIcon(QIcon(icon))
-        self.setStyleSheet(load_qss('/style/back_button.qss'))
+        self.setStyleSheet(load_qss('static/style/back_button.qss'))
         self.setIconSize(QSize(size, size))
         self.setFixedSize(40, 40)
         self.setCursor(Qt.PointingHandCursor)
@@ -369,7 +368,7 @@ class BackButton(QPushButton):
         self.clicked.connect(self.set_interface)
 
     def set_interface(self, index=-1):
-        if index <= -1:
+        if index <= 0:
             prev = self.stack_layout.currentIndex() - 1
             self.stack_layout.setCurrentIndex(prev if prev >= 0 else 0)
         else:
@@ -383,20 +382,20 @@ class BackButton(QPushButton):
 class LineEdit(QLineEdit):
     def __init__(self, *args):
         super(LineEdit, self).__init__(*args)
-        self.setStyleSheet(load_qss('/style/label_edit.qss'))
+        self.setStyleSheet(load_qss('static/style/label_edit.qss'))
 
 
 class DateEdit(QDateEdit):
     def __init__(self, *args):
         super(DateEdit, self).__init__(*args)
 
-        self.setStyleSheet(load_qss('/style/label_edit.qss') +
+        self.setStyleSheet(load_qss('static/style/label_edit.qss') +
                            'DateEdit::down-arrow {border-image:url(' +
-                           abs_path('/images/icon/down.png') + ');}' +
+                           abs_path('static/images/icon/down.png') + ');}' +
                            'QToolButton#qt_calendar_prevmonth{ qproperty-icon: url(' +
-                           abs_path('/images/icon/left.png') + '); }' +
+                           abs_path('static/images/icon/left.png') + '); }' +
                            'QToolButton#qt_calendar_nextmonth{ qproperty-icon: url(' +
-                           abs_path('/images/icon/right.png') + '); }'
+                           abs_path('static/images/icon/right.png') + '); }'
                            )
         self.setFixedWidth(280)
         self.setCursor(Qt.PointingHandCursor)
@@ -407,7 +406,7 @@ class DateEdit(QDateEdit):
 class EditLabel(QLabel):
     def __init__(self, *args):
         super(EditLabel, self).__init__(*args)
-        self.setStyleSheet(load_qss('/style/label_edit.qss'))
+        self.setStyleSheet(load_qss('static/style/label_edit.qss'))
 
 
 if __name__ == '__main__':
@@ -424,7 +423,7 @@ if __name__ == '__main__':
     base_window.move_center()
     # 注释掉的是固定大小窗口的演示。
     # base_window.setFixedSize(640, 400)
-    base_window.setWindowIcon(QIcon('./images/icon/logo.png'))
+    base_window.setWindowIcon(QIcon('static/images/icon/logo.png'))
     base_window.setWindowTitle('Just A Test')
 
     vBoxLayout = QVBoxLayout()

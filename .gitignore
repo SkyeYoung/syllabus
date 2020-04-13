@@ -1,3 +1,7 @@
 .idea
 venv
+build
+dist
 *.ics
+*.spec
+*.exe

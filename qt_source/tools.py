@@ -4,6 +4,7 @@
 __author__ = 'iskye'
 
 import os
+import sys
 
 
 def load_qss(file_road):
@@ -37,6 +38,9 @@ def get_bit_or_all(items: list):
         return result
 
 
-def abs_path(road: str):
+def abs_path(path: str):
     """绝对路径，用于解决资源路径问题"""
-    return os.path.dirname(os.path.abspath(__file__)).replace('\\', '/') + road
+    if hasattr(sys, '_MEIPASS'):
+        return sys._MEIPASS.replace('\\', '/') + '/' + path
+    else:
+        return os.path.dirname(os.path.abspath(__file__)).replace('\\', '/') + '/' + path

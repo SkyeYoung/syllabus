@@ -12,7 +12,7 @@ from PyQt5.QtWidgets import QFormLayout, QStackedLayout, QLabel, QWidget, QLineE
     QGraphicsOpacityEffect
 
 from qt_source.basewidget import *
-from qt_source.tools import load_qss
+from qt_source.tools import load_qss, abs_path
 from syllabus import *
 
 # 全局变量
@@ -32,7 +32,7 @@ class Window(BaseWindow):
         # 要想使 move_center 起作用，必须设置 resize
         self.resize(WINDOW_WIDTH, WINDOW_HEIGHT)
         self.move_center()
-        self.setWindowIcon(QIcon('./qt_source/images/icon/logo.png'))
+        self.setWindowIcon(QIcon(abs_path('static/images/icon/logo.png')))
         self.setWindowTitle('江科大课表导出 v1.0')
 
         self.stack_layout = QStackedLayout()
@@ -72,10 +72,10 @@ class StepHello(QWidget):
         super(StepHello, self).__init__()
         self.stack_layout = stack_layout
 
-        self.setStyleSheet(load_qss('/style/step_hello.qss'))
+        self.setStyleSheet(load_qss('static/style/step_hello.qss'))
 
         self.img = QLabel(self)
-        self.img.setPixmap(QPixmap('./qt_source/images/bg.jpg'))
+        self.img.setPixmap(QPixmap(abs_path('static/images/bg.jpg')))
         self.img.adjustSize()
         self.img.setScaledContents(True)  # 保持大小一样
 
@@ -166,7 +166,7 @@ class StepOthers(QWidget):
         self.stack_layout = stack_layout
 
         # 样式
-        self.setStyleSheet(load_qss('/style/step_others.qss'))
+        self.setStyleSheet(load_qss('static/style/step_others.qss'))
 
         # 返回按钮
         self.back_btn = BackButton(self, stack_layout=stack_layout)
@@ -312,7 +312,7 @@ class StepDate(StepOthersWithForm):
 
         # 底部按钮
         self.btn.setText('下一步')
-        self.btn.clicked.connect(lambda: self.step_action(date_edit.date(), ))
+        self.btn.clicked.connect(lambda: self.step_action(date_edit.date()))
 
     def step_action(self, date: QDate):
         index = 0
@@ -343,7 +343,7 @@ class StepSuccess(StepOthers):
         # 文字
         self.set_text(self.title, '成功了！')
         self.set_text(self.content1, '学校的服务器居然承受住了本次访问。')
-        self.set_text(self.content2, '请再试一次吧。')
+        self.set_text(self.content2, '请尽情享受吧。')
 
         # 成功信息
         success_msg = QLabel(self)
@@ -357,8 +357,9 @@ class StepSuccess(StepOthers):
         self.btn.setText('结束程序')
         self.btn.clicked.connect(self.exit)
 
-    def exit(self):
-        self.close()
+    @staticmethod
+    def exit():
+        window.close()
 
 
 class StepMistake(StepOthers):
@@ -376,7 +377,7 @@ class StepMistake(StepOthers):
         # 文字
         self.set_text(self.title, '这下尴尬了...')
         self.set_text(self.content1, '导出过程中出现异常，我们发现了以下错误。')
-        self.set_text(self.content2, '请尽情享受吧。')
+        self.set_text(self.content2, '请再试一次吧。')
 
         # 错误信息
         StepMistake.err_msg_label = QLabel(self)
