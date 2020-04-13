@@ -49,10 +49,11 @@
    ```bash
    # 进入仓库所在目录
    $ cd ./syllabus
+   
    # 使用 PyInstaller 打包
    $ pyinstaller -F -w pyqt.py \
-   > --name SyllabusDesktop 
-   > --add-data "./qt_source/static;static" 
+   > --name SyllabusDesktop \
+   > --add-data "./qt_source/static;static" \
    > --icon "./qt_source/static/images/icon/logo.ico"
    ```
 
