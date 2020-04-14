@@ -12,7 +12,12 @@ QLabel#content {
     color: #919191;
 }
 
-QLabel#err-msg, QLabel#suc-msg {
+QLabel#suc-msg {
     font-size: 18px;
+    color: #000000;
+}
+
+QLabel#err-msg {
+    font-size: 14px;
     color: #000000;
 }

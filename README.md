@@ -72,15 +72,15 @@
 ### 网页版截图
 
 
-<img src="/images/web_screenshot_1.png" alt="说明" height="140">
+<img src="/images/web_screenshot_1.png" alt="首页" height="140">
 
 <img src="/images/web_screenshot_2.png" alt="说明" height="140">
 
 ### 桌面版截图
 
-<img src="/images/desktop_screenshot_1.png" alt="首页" height="140">
+<img src="/images/desktop_screenshot_1.png" alt="欢迎" height="140">
 
-<img src="/images/desktop_screenshot_2.png" alt="首页" height="140">
+<img src="/images/desktop_screenshot_2.png" alt="输入账户" height="140">
 
 ### 为什么写这个程序
 
@@ -94,7 +94,7 @@
 
 一直很想写个桌面端的软件，在大一也对 Qt 和 Electron 着过迷。可是那时候 Qt 的文档看得我晕头转向，再加上很快被其它东西吸引了，就没有继续尝试。这一次虽然用的不是 C++ 和 QML ，也算遂了愿吧。
 
-（以后再也不会写了。）
+（好花时间，以后再也不会写了。）
 
 ### 下一步计划
 

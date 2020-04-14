@@ -9,8 +9,8 @@ import typing
 from ctypes import windll
 
 from PyQt5 import QtGui
-from PyQt5.QtCore import Qt, QSize
-from PyQt5.QtGui import QIcon, QPixmap, QPainter
+from PyQt5.QtCore import QSize
+from PyQt5.QtGui import QPainter
 from PyQt5.QtWidgets import QWidget, QPushButton, QHBoxLayout, QApplication, QMainWindow, QVBoxLayout, QDesktopWidget, \
     QStackedLayout, QLineEdit, QLabel, QDateEdit
 
@@ -67,21 +67,23 @@ class RawTitleBar(QWidget):
         self.__close_btn.setFixedSize(BTN_WIDTH, BTN_HEIGHT)
 
         # 设置两大按钮图标
-        self.__min_btn.setIcon(QIcon(abs_path('static/images/icon/minimize.png')))
-        self.__max_btn.setIcon(QIcon(abs_path('static/images/icon/maximize.png')))
+        self.__min_btn.setIcon(scaled_icon(BTN_WIDTH, BTN_HEIGHT, 'static/images/icon/minimize.png'))
+        self.__max_btn.setIcon(scaled_icon(BTN_WIDTH, BTN_HEIGHT, 'static/images/icon/maximize.png'))
 
         # 关闭按钮额外设置
         self.__close_btn.setStyleSheet(
-            'QPushButton{border-image:url(' + abs_path('static/images/icon/close.png') + ');}' +  # 按钮正常状态
+            'QPushButton{' +
+            'border-image:url(' + abs_path('static/images/icon/close.png') + ');}' +
             'QPushButton:hover{background: #e81123;' +
-            'border-image:url(' + abs_path('static/images/icon/close-hover.png') + ');}' +  # 鼠标悬浮状态
+            'border-image:url(' + abs_path('static/images/icon/close_hover.png') + ');}' +
             'QPushButton:disabled{' +
-            f'border-image:url(' + abs_path('static/images/icon/close-disable.png') + ');}')  # 按钮禁用状态
+            'border-image:url(' + abs_path('static/images/icon/close_disabled.png') + ');}'
+        )
 
         # 设置三大按钮图标大小
-        self.__min_btn.setIconSize(QSize(24, 21))
-        self.__max_btn.setIconSize(QSize(24, 21))
-        self.__close_btn.setIconSize(QSize(24, 21))
+        self.__min_btn.setIconSize(QSize(BTN_WIDTH, BTN_HEIGHT))
+        self.__max_btn.setIconSize(QSize(BTN_WIDTH, BTN_HEIGHT))
+        self.__close_btn.setIconSize(QSize(BTN_WIDTH, BTN_HEIGHT))
 
         # 设置三大按钮点击事件
         self.__min_btn.clicked.connect(self.__minimize_window)
