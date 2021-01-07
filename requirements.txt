@@ -1,6 +1,6 @@
 beautifulsoup4==4.8.2
 Flask==1.1.1
 icalendar==4.0.5
-lxml==4.5.0
+lxml==4.6.2
 PyQt5==5.14.1
 requests==2.23.0
